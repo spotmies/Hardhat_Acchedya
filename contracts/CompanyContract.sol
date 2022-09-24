@@ -6,7 +6,7 @@ import "./variables.sol";
 
 error YOUR_PROFILE_VERIFICATION_PENDING();
 
-contract Acchedya2 is Ownable, variables {
+contract CompanyContract is Ownable, variables {
     // // // // // //
     // COMPANY SECTION
     // // // // // //

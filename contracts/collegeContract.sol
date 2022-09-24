@@ -8,7 +8,7 @@ error YOU_ARE_NOT_AUTHORIZED_TO_UPDATE();
 error STUDENT_ALREADY_EXIST();
 error YOUR_PROFILE_VERIFICATION_PENDING();
 
-contract Acchedya is Ownable, variables {
+contract CollegeContract is Ownable, variables {
     // // // // // //
     // STUDENT SECTION
     // // // // // //
