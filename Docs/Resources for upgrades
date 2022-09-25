@@ -1,3 +1,5 @@
+<!-- Read all the resources below before upgrading contracts to understand how upgrades work -->
+
 https://blog.openzeppelin.com/the-state-of-smart-contract-upgrades/#diamonds
 
 https://docs.openzeppelin.com/learn/upgrading-smart-contracts#upgrading-a-contract-via-plugins
@@ -6,4 +8,24 @@ https://blog.gnosis.pm/solidity-delegateproxy-contracts-e09957d0f201
 
 https://betterprogramming.pub/not-all-smart-contracts-are-immutable-create-upgradable-smart-contracts-e4e933b7b8a9
 
-DIAMONDS PROXY: https://eips.ethereum.org/EIPS/eip-2535
+<!-- Different proxy patterns explainations -->
+
+<!-- TRANSPARENT PROXY -->
+
+TRANSPARENT PROXY PATTERN:
+
+https://blog.openzeppelin.com/the-transparent-proxy-pattern/
+
+<!-- UUPS PROXY -->
+
+UUPS PROXY PATTERN (RECOMMENDED):
+
+https://medium.com/coinmonks/how-to-create-an-uups-proxy-66eca257b2f9
+
+https://blog.logrocket.com/using-uups-proxy-pattern-upgrade-smart-contracts/#comparing-proxy-patterns
+
+<!-- DIAMOND OR BEACON PROXY -->
+
+DIAMONDS PROXY:
+
+https://eips.ethereum.org/EIPS/eip-2535
