@@ -16,6 +16,7 @@
     "hardhat": "^2.11.1",
     "hardhat-deploy": "^0.11.15",
     "hardhat-gas-reporter": "^1.0.8",
+    "hardhat-waffle": "^0.0.1-security",
     "nft.storage": "^7.0.0",
     "solidity-coverage": "^0.8.0",
     "typechain": "^8.1.0"
