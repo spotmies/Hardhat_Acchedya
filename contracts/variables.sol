@@ -4,6 +4,11 @@ pragma solidity ^0.8.7;
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
+/// @title Acchedya College/Student Contract
+/// @author Hemanth Veeranala
+/// @notice This contract is used to store/update/retrieve the student details and college details
+/// @dev Go through the resources mentioned in the Docs folder before making any changes to the contract. This is a UUPS upgradable contract, so it is better to understand how upgrades work in solidity before making changes.
+
 contract variables is Ownable {
     using SafeMath for uint;
     using SafeMath for uint32;
