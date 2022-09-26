@@ -8,10 +8,10 @@ error YOU_ARE_NOT_AUTHORIZED_TO_UPDATE();
 error STUDENT_ALREADY_EXIST();
 error YOUR_PROFILE_VERIFICATION_PENDING();
 
-/// @title Acchedya College/Student Contract
-/// @author: Hemanth Veeranala
-/// @notice: This contract is used to store/update/retrieve the student details and college details
-/// @dev: Go through the resources mentioned in the Docs folder before making any changes to the contract. This is a UUPS upgradable contract, so it is better to understand how upgrades work in solidity before making changes.
+///  @title Acchedya College/Student Contract
+/// @author Hemanth Veeranala
+/// @notice This contract is used to store/update/retrieve the student details and college details
+/// @dev Go through the resources mentioned in the Docs folder before making any changes to the contract. This is a UUPS upgradable contract, so it is better to understand how upgrades work in solidity before making changes.
 
 contract CollegeContract is Ownable, variables {
     // function Add_Student_Certificates_by_onlyCollege(
@@ -90,9 +90,9 @@ contract CollegeContract is Ownable, variables {
     // COLLEGE SECTION
     ///////////////////////////////////////////////////////////////////////////////////////////////
 
-    /// @notice: This function is used to add a college to the contract.
-    /// @param _collegeAddr: wallet address of the college
-    /// @param _address: physical address of the college
+    /// @notice  This function is used to add a college to the contract.
+    /// @param _collegeAddr wallet address of the college
+    /// @param _address physical address of the college
 
     function Add_College(
         address _collegeAddr,
@@ -135,9 +135,9 @@ contract CollegeContract is Ownable, variables {
         }
     }
 
-    /// @notice: This function is used to verify college and only admin can call this function (onlyOwner modifier might not be appeared during testing phase).
-    /// @param _index: index of the college in the collegeDetails mapping
-    /// @param code: 1 for pending, 2 for verified, 3 for rejected
+    /// @notice  This function is used to verify college and only admin can call this function (onlyOwner modifier might not be appeared during testing phase).
+    /// @param _index of the college in the collegeDetails mapping
+    /// @param code 1 for pending, 2 for verified, 3 for rejected
 
     function verifyCollege(
         uint32 _index,
@@ -160,9 +160,8 @@ contract CollegeContract is Ownable, variables {
     // STUDENT SECTION
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    /// @notice: This function is used to verify student and only colleges can call this function (onlyRole modifier might not be called during testing phase).
-    /// @param _index: index of the student in the studentDetails mapping
-    /// @param _verified: code 1 for pending, 2 for verified, 3 for rejected
+    /// @notice This function is used to verify student and only colleges can call this function (onlyRole modifier might not be called during testing phase).
+    /// @param _verified code 1 for pending, 2 for verified, 3 for rejected
 
     function student_Verified(
         address _clgAddress,
@@ -175,11 +174,9 @@ contract CollegeContract is Ownable, variables {
         studentDetails[msg.sender][colReq[_clgAddress]][0].verified = _verified;
     }
 
-    /// @notice: This function is used to add student certificates and students/colleges can call this function (onlyRole modifier might not appear during testing).
-    /// @notice: Do not get confused with add student function.
-    /// @notice: The structs below student & student2 are intentionally seperated to avoid stack too deep error. Do not merge them into a single struct in future.
-    /// @param _index: index of the student in the studentDetails mapping
-    /// @param _verified: code 1 for pending, 2 for verified, 3 for rejected
+    /// @notice This function is used to add student certificates and students/colleges can call this function (onlyRole modifier might not appear during testing).
+    /// @notice Do not get confused with add student function.
+    /// @notice The structs below student & student2 are intentionally seperated to avoid stack too deep error. Do not merge them into a single struct in future.
 
     function Add_Student_Certificates(
         address _collegeAddr,
@@ -245,10 +242,8 @@ contract CollegeContract is Ownable, variables {
         }
     }
 
-    /// @notice: This function is used to update student certificates and students/colleges can call this function (onlyRole modifier might not appear during testing).
-    /// @notice: The structs below student & student2 are intentionally seperated to avoid stack too deep error. Do not merge them into a single struct in future.
-    /// @param _index: index of the student in the studentDetails mapping
-    /// @param _verified: code 1 for pending, 2 for verified, 3 for rejected
+    /// @notice This function is used to update student certificates and students/colleges can call this function (onlyRole modifier might not appear during testing).
+    /// @notice The structs below student & student2 are intentionally seperated to avoid stack too deep error. Do not merge them into a single struct in future.
 
     function update_student_certificates(
         address _collegeAddr,

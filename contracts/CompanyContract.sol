@@ -7,16 +7,16 @@ import "./variables.sol";
 error YOUR_PROFILE_VERIFICATION_PENDING();
 
 /// @title Acchedya College/Student Contract
-/// @author: Hemanth Veeranala
-/// @notice: This contract is used to store/update/retrieve the student details and college details
-/// @dev: Go through the resources mentioned in the Docs folder before making any changes to the contract. This is a UUPS upgradable contract, so it is better to understand how upgrades work in solidity before making changes.
+/// @author Hemanth Veeranala
+/// @notice This contract is used to store/update/retrieve the student details and college details
+/// @dev Go through the resources mentioned in the Docs folder before making any changes to the contract. This is a UUPS upgradable contract, so it is better to understand how upgrades work in solidity before making changes.
 
 contract CompanyContract is Ownable, variables {
     // // // // // //
     // COMPANY SECTION
     // // // // // //
 
-    /// @notice: This function is used to add a company to the contract.
+    /// @notice This function is used to add a company to the contract.
     /// @param _companyAddr: wallet address of the company
     /// @param _address: physical address of the company
 
@@ -65,7 +65,7 @@ contract CompanyContract is Ownable, variables {
         }
     }
 
-    /// @notice: This function is used to verify company and only admin can call this function (onlyOwner modifier might not be appeared during testing phase).
+    /// @notice This function is used to verify company and only admin can call this function (onlyOwner modifier might not be appeared during testing phase).
     /// @param _index: index of the college in the companyDetails mapping
     /// @param code: 1 for pending, 2 for verified, 3 for rejected
 
@@ -111,8 +111,8 @@ contract CompanyContract is Ownable, variables {
         );
     }
 
-    /// @notice: This function is used to verify employee certificates and only companies can call this function (onlyRole modifier might not be appeared during testing phase).
-    /// @param: _verified: 1 for pending, 2 for verified, 3 for rejected
+    /// @notice This function is used to verify employee certificates and only companies can call this function (onlyRole modifier might not be appeared during testing phase).
+    /// @param _verified: 1 for pending, 2 for verified, 3 for rejected
 
     function employeeCertVerified(address _collegeAddr, uint32 _verified)
         public
