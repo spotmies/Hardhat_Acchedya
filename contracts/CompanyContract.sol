@@ -6,10 +6,19 @@ import "./variables.sol";
 
 error YOUR_PROFILE_VERIFICATION_PENDING();
 
+/// @title Acchedya College/Student Contract
+/// @author: Hemanth Veeranala
+/// @notice: This contract is used to store/update/retrieve the student details and college details
+/// @dev: Go through the resources mentioned in the Docs folder before making any changes to the contract. This is a UUPS upgradable contract, so it is better to understand how upgrades work in solidity before making changes.
+
 contract CompanyContract is Ownable, variables {
     // // // // // //
     // COMPANY SECTION
     // // // // // //
+
+    /// @notice: This function is used to add a company to the contract.
+    /// @param _companyAddr: wallet address of the company
+    /// @param _address: physical address of the company
 
     function AddCompany(
         address _companyAddr,
@@ -56,6 +65,10 @@ contract CompanyContract is Ownable, variables {
         }
     }
 
+    /// @notice: This function is used to verify company and only admin can call this function (onlyOwner modifier might not be appeared during testing phase).
+    /// @param _index: index of the college in the companyDetails mapping
+    /// @param code: 1 for pending, 2 for verified, 3 for rejected
+
     function verifyCompany(
         uint256 _index,
         uint256 code,
@@ -71,25 +84,6 @@ contract CompanyContract is Ownable, variables {
             0x02045258af11576776f56337f0666fcac2b654a57c15c8a528e83f2b72f40eef,
             cmpAddr
         );
-    }
-
-    function getCompaniesToOwner() public view returns (company[] memory) {
-        uint256 i;
-        address theOwner = owner();
-        uint256 len = companyDetails[theOwner].length;
-        company[] memory companyDet = new company[](len);
-
-        for (i = 0; i < len; i++) {
-            if (msg.sender != owner()) {
-                if (msg.sender == companyDetails[theOwner][i].access) {
-                    companyDet[i] = companyDetails[theOwner][i];
-                }
-            } else {
-                require(msg.sender == owner(), "you are not the owner");
-                companyDet[i] = companyDetails[theOwner][i];
-            }
-        }
-        return (companyDet);
     }
 
     function AddEmployeeCert(
@@ -116,6 +110,9 @@ contract CompanyContract is Ownable, variables {
             )
         );
     }
+
+    /// @notice: This function is used to verify employee certificates and only companies can call this function (onlyRole modifier might not be appeared during testing phase).
+    /// @param: _verified: 1 for pending, 2 for verified, 3 for rejected
 
     function employeeCertVerified(address _collegeAddr, uint32 _verified)
         public
@@ -178,6 +175,29 @@ contract CompanyContract is Ownable, variables {
 
     function updateStatus(uint32 _index, uint32 inviStatus) public {
         jobInvites[msg.sender][_index].status = inviStatus;
+    }
+
+    ////////////////////////////////////////////////////////
+    //// VIEW FUNCTIONS
+    ////////////////////////////////////////////////////////
+
+    function getCompaniesToOwner() public view returns (company[] memory) {
+        uint256 i;
+        address theOwner = owner();
+        uint256 len = companyDetails[theOwner].length;
+        company[] memory companyDet = new company[](len);
+
+        for (i = 0; i < len; i++) {
+            if (msg.sender != owner()) {
+                if (msg.sender == companyDetails[theOwner][i].access) {
+                    companyDet[i] = companyDetails[theOwner][i];
+                }
+            } else {
+                require(msg.sender == owner(), "you are not the owner");
+                companyDet[i] = companyDetails[theOwner][i];
+            }
+        }
+        return (companyDet);
     }
 
     function getEmpAddr() public view returns (address[] memory) {

@@ -106,10 +106,10 @@ contract variables is Ownable {
     mapping(address => string) internal waiting;
     mapping(address => address[]) internal companyReqs;
 
-    bytes32 public constant COLLEGE = keccak256(abi.encodePacked("COLLEGE"));
-    bytes32 public constant COMPANY = keccak256(abi.encodePacked("COMPANY"));
-    bytes32 public constant STUDENT = keccak256(abi.encodePacked("STUDENT"));
-    bytes32 public constant RETRIEVER =
+    bytes32 internal constant COLLEGE = keccak256(abi.encodePacked("COLLEGE"));
+    bytes32 internal constant COMPANY = keccak256(abi.encodePacked("COMPANY"));
+    bytes32 internal constant STUDENT = keccak256(abi.encodePacked("STUDENT"));
+    bytes32 internal constant RETRIEVER =
         keccak256(abi.encodePacked("RETRIEVER"));
 
     modifier onlyRole(bytes32 _role) {
@@ -117,7 +117,7 @@ contract variables is Ownable {
         _;
     }
 
-    function GrantRole(bytes32 _role, address _account) public onlyOwner {
+    function GrantRole(bytes32 _role, address _account) internal onlyOwner {
         Roles[_role][_account] = true;
     }
 
