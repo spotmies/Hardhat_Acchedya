@@ -1,5 +1,7 @@
 <!-- Read all the resources below before upgrading contracts to understand how upgrades work -->
 
+<!-- You can also learn about multi-sig wallets in the below link -->
+
 https://blog.openzeppelin.com/the-state-of-smart-contract-upgrades/#diamonds
 
 https://docs.openzeppelin.com/learn/upgrading-smart-contracts#upgrading-a-contract-via-plugins
