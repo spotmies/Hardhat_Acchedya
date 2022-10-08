@@ -214,7 +214,9 @@ contract CollegeContract is Ownable, variables {
             /*
              * Replace colReq[] mapping with studentDetails.length() before testing and check whether colReq[] mapping can be removed to save some gas.
              */
-            studIndex[msg.sender].push(studentIndex(collegeAddr, collegeCount));
+            studIndex[_studentWalletAddress].push(
+                studentIndex(collegeAddr, collegeCount)
+            );
             studentDetails[collegeAddr][collegeCount].push(
                 student(
                     studentStruct.certs,

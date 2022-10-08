@@ -5,6 +5,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "./variables.sol";
 
 error YOUR_PROFILE_VERIFICATION_PENDING();
+error YOU_ARE_NOT_AUTHORIZED_TO_UPDATE();
 
 /// @title Acchedya College/Student Contract
 /// @author Hemanth Veeranala
@@ -88,6 +89,7 @@ contract CompanyContract is Ownable, variables {
 
     function AddEmployeeCert(
         address _studentAddress,
+        address _companyAddress,
         string memory _joiningDate,
         string memory _leftDate,
         string memory _designation,
@@ -95,20 +97,78 @@ contract CompanyContract is Ownable, variables {
         string[] memory _certNames,
         string memory _certType
     ) public {
-        employeeCert[_studentAddress][0].push(
-            employee(
-                _joiningDate,
-                _leftDate,
-                _designation,
-                block.timestamp,
-                _certs,
-                _certNames,
-                _certType,
-                "COMPANY",
-                msg.sender,
-                3
-            )
-        );
+        string memory _role = checkAddress(msg.sender);
+
+        if (
+            keccak256(abi.encodePacked(_role)) !=
+            keccak256(abi.encodePacked("STUDENT")) ||
+            keccak256(abi.encodePacked(_role)) ==
+            keccak256(abi.encodePacked("COMPANY"))
+        ) {
+            employeeCert[_studentAddress][0].push(
+                employee(
+                    _joiningDate,
+                    _leftDate,
+                    _designation,
+                    block.timestamp,
+                    _certs,
+                    _certNames,
+                    _certType,
+                    _role,
+                    _companyAddress,
+                    3
+                )
+            );
+        } else {
+            revert YOU_ARE_NOT_AUTHORIZED_TO_UPDATE();
+        }
+    }
+
+    function update_employee_cert(
+        address _studentAddress,
+        address _companyAddress,
+        string memory _joiningDate,
+        string memory _leftDate,
+        string memory _designation,
+        string[] memory _certs,
+        string[] memory _certNames,
+        string memory _certType
+    ) public {
+        string memory _role = checkAddress(msg.sender);
+        uint32 _verify;
+
+        if (
+            keccak256(abi.encodePacked(_role)) !=
+            keccak256(abi.encodePacked("STUDENT"))
+        ) {
+            _verify = 1;
+        } else if (
+            keccak256(abi.encodePacked(_role)) ==
+            keccak256(abi.encodePacked("COMPANY"))
+        ) {
+            _verify = 3;
+        }
+
+        if (
+            keccak256(abi.encodePacked(_role)) !=
+            keccak256(abi.encodePacked("STUDENT")) ||
+            keccak256(abi.encodePacked(_role)) ==
+            keccak256(abi.encodePacked("COMPANY"))
+        ) {
+            employeeCert[_studentAddress][0][0].joiningDate = _joiningDate;
+            employeeCert[_studentAddress][0][0].leftDate = _leftDate;
+            employeeCert[_studentAddress][0][0].designation = _designation;
+            employeeCert[_studentAddress][0][0].designation = _designation;
+            employeeCert[_studentAddress][0][0].timestamp = block.timestamp;
+            employeeCert[_studentAddress][0][0].certs = _certs;
+            employeeCert[_studentAddress][0][0].certName = _certNames;
+            employeeCert[_studentAddress][0][0].certType = _certType;
+            employeeCert[_studentAddress][0][0].AddedBy = _role;
+            employeeCert[_studentAddress][0][0].companyAdd = _companyAddress;
+            employeeCert[_studentAddress][0][0].verified = _verify;
+        } else {
+            revert YOU_ARE_NOT_AUTHORIZED_TO_UPDATE();
+        }
     }
 
     /// @notice This function is used to verify employee certificates and only companies can call this function (onlyRole modifier might not be appeared during testing phase).
@@ -120,31 +180,31 @@ contract CompanyContract is Ownable, variables {
         employeeCert[_collegeAddr][0][0].verified = _verified;
     }
 
-    function AddEmpCertself(
-        address _studentAddress,
-        string memory _joiningDate,
-        string memory _leftDate,
-        string memory _designation,
-        string[] memory _certs,
-        string[] memory _certNames,
-        string memory _certType
-    ) public {
-        address studentAdd = _studentAddress;
-        employeeCert[studentAdd][0].push(
-            employee(
-                _joiningDate,
-                _leftDate,
-                _designation,
-                block.timestamp,
-                _certs,
-                _certNames,
-                _certType,
-                "EMPLOYEE",
-                msg.sender,
-                1
-            )
-        );
-    }
+    // function AddEmpCertself(
+    //     address _studentAddress,
+    //     string memory _joiningDate,
+    //     string memory _leftDate,
+    //     string memory _designation,
+    //     string[] memory _certs,
+    //     string[] memory _certNames,
+    //     string memory _certType
+    // ) public {
+    //     address studentAdd = _studentAddress;
+    //     employeeCert[studentAdd][0].push(
+    //         employee(
+    //             _joiningDate,
+    //             _leftDate,
+    //             _designation,
+    //             block.timestamp,
+    //             _certs,
+    //             _certNames,
+    //             _certType,
+    //             "EMPLOYEE",
+    //             msg.sender,
+    //             1
+    //         )
+    //     );
+    // }
 
     function getEmpDet(address _studentAddr)
         public
