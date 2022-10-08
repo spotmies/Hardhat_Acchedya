@@ -1,8 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.7;
 
-import "@openzeppelin/contracts/access/Ownable.sol";
+// import "@openzeppelin/contracts/access/Ownable.sol";
 import "./variables.sol";
+
+import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
 error YOUR_PROFILE_VERIFICATION_PENDING();
 error YOU_ARE_NOT_AUTHORIZED_TO_UPDATE();
@@ -14,7 +16,15 @@ error You_Cannot_Access_The_Data();
 /// @notice This contract is used to store/update/retrieve the student details and college details
 /// @dev Go through the resources mentioned in the Docs folder before making any changes to the contract. This is a UUPS upgradable contract, so it is better to understand how upgrades work in solidity before making changes.
 
-contract CompanyContract is variables {
+contract CompanyContract is variables, UUPSUpgradeable {
+    function initialize() public initializer {
+        ///@dev as there is no constructor, we need to initialise the OwnableUpgradeable explicitly
+        __Ownable_init();
+    }
+
+    ///@dev required by the OZ UUPS module
+    function _authorizeUpgrade(address) internal override onlyOwner {}
+
     // // // // // //
     // COMPANY SECTION
     // // // // // //

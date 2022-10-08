@@ -12,18 +12,10 @@ import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 /// @notice This contract is used to store/update/retrieve the student details and college details
 /// @dev Go through the resources mentioned in the Docs folder before making any changes to the contract. This is a UUPS upgradable contract, so it is better to understand how upgrades work in solidity before making changes.
 
-contract variables is OwnableUpgradeable, UUPSUpgradeable {
+contract variables is OwnableUpgradeable {
     using SafeMath for uint;
     using SafeMath for uint32;
     using SafeMath for uint256;
-
-    function initialize() public initializer {
-        ///@dev as there is no constructor, we need to initialise the OwnableUpgradeable explicitly
-        __Ownable_init();
-    }
-
-    ///@dev required by the OZ UUPS module
-    function _authorizeUpgrade(address) internal override onlyOwner {}
 
     ////////////////////////////////
     // company variables

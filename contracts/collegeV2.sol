@@ -16,8 +16,8 @@ error YOUR_PROFILE_VERIFICATION_PENDING();
 /// @notice This contract is used to store/update/retrieve the student details and college details
 /// @dev Go through the resources mentioned in the Docs folder before making any changes to the contract. This is a UUPS upgradable contract, so it is better to understand how upgrades work in solidity before making changes.
 
-contract CollegeContract is variables, UUPSUpgradeable {
-    function initialize() public initializer {
+contract CollegeContractV2 is variables, UUPSUpgradeable {
+    function initialize() public reinitializer(2) {
         ///@dev as there is no constructor, we need to initialise the OwnableUpgradeable explicitly
         __Ownable_init();
     }
@@ -165,6 +165,10 @@ contract CollegeContract is variables, UUPSUpgradeable {
             0x02045258af11576776f56337f0666fcac2b654a57c15c8a528e83f2b72f40eef,
             clgAddr
         );
+    }
+
+    function version() public pure returns (string memory) {
+        return "College Version 2";
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
