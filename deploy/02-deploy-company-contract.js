@@ -3,10 +3,11 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
   const { deployer } = await getNamedAccounts();
   log("Deploying Company contract...");
 
-  const CompanyContract = await deploy("CompanyContract", {
-    from: deployer,
-    args: [],
-    log: true,
+  const CompanyContract = await ethers.getContractFactory("CompanyContract");
+  const CompanyContractProxy = await upgrades.deployProxy(CompanyContract, [], {
+    kind: "uups",
+    initializer: "initialize",
   });
-  log("Deployed company contract to:", CompanyContract.address);
+  await CompanyContractProxy.deployed();
+  log("Deployed company contract to:", CompanyContractProxy.address);
 };

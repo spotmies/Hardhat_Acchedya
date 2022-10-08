@@ -6,13 +6,15 @@ import "./variables.sol";
 
 error YOUR_PROFILE_VERIFICATION_PENDING();
 error YOU_ARE_NOT_AUTHORIZED_TO_UPDATE();
+error You_are_not_the_owner();
+error You_Cannot_Access_The_Data();
 
 /// @title Acchedya College/Student Contract
 /// @author Hemanth Veeranala
 /// @notice This contract is used to store/update/retrieve the student details and college details
 /// @dev Go through the resources mentioned in the Docs folder before making any changes to the contract. This is a UUPS upgradable contract, so it is better to understand how upgrades work in solidity before making changes.
 
-contract CompanyContract is Ownable, variables {
+contract CompanyContract is variables {
     // // // // // //
     // COMPANY SECTION
     // // // // // //
@@ -253,7 +255,9 @@ contract CompanyContract is Ownable, variables {
                     companyDet[i] = companyDetails[theOwner][i];
                 }
             } else {
-                require(msg.sender == owner(), "you are not the owner");
+                if (msg.sender != owner()) {
+                    revert You_are_not_the_owner();
+                }
                 companyDet[i] = companyDetails[theOwner][i];
             }
         }
@@ -275,10 +279,9 @@ contract CompanyContract is Ownable, variables {
 
         for (i = 0; i < len; i++) {
             if (msg.sender == jobInvites[studAddr][i].companyAddress) {
-                require(
-                    msg.sender == jobInvites[studAddr][i].companyAddress,
-                    "You cannot Access the data"
-                );
+                if (msg.sender != jobInvites[studAddr][i].companyAddress) {
+                    revert You_Cannot_Access_The_Data();
+                }
                 companyInvi[i] = jobInvites[studAddr][i];
             } else {
                 companyInvi[i] = jobInvites[studAddr][i];

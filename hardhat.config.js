@@ -1,5 +1,6 @@
 require("@nomicfoundation/hardhat-toolbox");
 require("@nomiclabs/hardhat-ethers");
+require("@openzeppelin/hardhat-upgrades");
 
 require("@nomiclabs/hardhat-etherscan");
 require("hardhat-gas-reporter");
@@ -34,6 +35,12 @@ module.exports = {
   },
   solidity: {
     compilers: [{ version: "0.8.7" }],
+  },
+  settings: {
+    optimizer: {
+      enabled: true,
+      runs: 200,
+    },
   },
   etherscan: {
     apiKey: ETHERSCAN_API_KEY,
