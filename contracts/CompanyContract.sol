@@ -110,6 +110,19 @@ contract CompanyContract is variables, UUPSUpgradeable {
         string memory _certType
     ) public {
         string memory _role = checkAddress(msg.sender);
+        uint32 _verify;
+
+        if (
+            keccak256(abi.encodePacked(_role)) !=
+            keccak256(abi.encodePacked("STUDENT"))
+        ) {
+            _verify = 1;
+        } else if (
+            keccak256(abi.encodePacked(_role)) ==
+            keccak256(abi.encodePacked("COMPANY"))
+        ) {
+            _verify = 3;
+        }
 
         if (
             keccak256(abi.encodePacked(_role)) !=
@@ -128,7 +141,7 @@ contract CompanyContract is variables, UUPSUpgradeable {
                     _certType,
                     _role,
                     _companyAddress,
-                    3
+                    _verify
                 )
             );
         } else {
@@ -170,7 +183,6 @@ contract CompanyContract is variables, UUPSUpgradeable {
             employeeCert[_studentAddress][0][0].joiningDate = _joiningDate;
             employeeCert[_studentAddress][0][0].leftDate = _leftDate;
             employeeCert[_studentAddress][0][0].designation = _designation;
-            employeeCert[_studentAddress][0][0].designation = _designation;
             employeeCert[_studentAddress][0][0].timestamp = block.timestamp;
             employeeCert[_studentAddress][0][0].certs = _certs;
             employeeCert[_studentAddress][0][0].certName = _certNames;
@@ -191,32 +203,6 @@ contract CompanyContract is variables, UUPSUpgradeable {
     {
         employeeCert[_collegeAddr][0][0].verified = _verified;
     }
-
-    // function AddEmpCertself(
-    //     address _studentAddress,
-    //     string memory _joiningDate,
-    //     string memory _leftDate,
-    //     string memory _designation,
-    //     string[] memory _certs,
-    //     string[] memory _certNames,
-    //     string memory _certType
-    // ) public {
-    //     address studentAdd = _studentAddress;
-    //     employeeCert[studentAdd][0].push(
-    //         employee(
-    //             _joiningDate,
-    //             _leftDate,
-    //             _designation,
-    //             block.timestamp,
-    //             _certs,
-    //             _certNames,
-    //             _certType,
-    //             "EMPLOYEE",
-    //             msg.sender,
-    //             1
-    //         )
-    //     );
-    // }
 
     function getEmpDet(address _studentAddr)
         public

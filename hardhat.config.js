@@ -11,14 +11,19 @@ const GOERLI_RPC_URL = process.env.GOERLI_RPC_URL;
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
 const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY;
 const COINMARKETCAP_API_KEY = process.env.COINMARKETCAP_API_KEY;
+const localHostKey = process.env.LOCAL_HOST_PRIVATE_KEY;
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
   defaultNetwork: "hardhat",
   networks: {
+    hardhat: {
+      allowUnlimitedContractSize: true,
+    },
     localhost: {
       url: "http://localhost:8545",
       chainId: 31337,
+      accounts: [localHostKey],
     },
     rinkeby: {
       url: "https://rinkeby.infura.io/v3/your-api-key",
