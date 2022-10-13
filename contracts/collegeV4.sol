@@ -16,8 +16,8 @@ error YOUR_PROFILE_VERIFICATION_PENDING();
 /// @notice This contract is used to store/update/retrieve the student details and college details
 /// @dev Go through the resources mentioned in the Docs folder before making any changes to the contract. This is a UUPS upgradable contract, so it is better to understand how upgrades work in solidity before making changes.
 
-contract CollegeContract is variables, UUPSUpgradeable {
-    function initialize() public reinitializer(2) {
+contract CollegeContractV4 is variables, UUPSUpgradeable {
+    function initialize() public reinitializer(3) {
         ///@dev as there is no constructor, we need to initialise the OwnableUpgradeable explicitly
         __Ownable_init();
     }
@@ -25,77 +25,9 @@ contract CollegeContract is variables, UUPSUpgradeable {
     ///@dev required by the OZ UUPS module
     function _authorizeUpgrade(address) internal override onlyOwner {}
 
-    // function Add_Student_Certificates_by_onlyCollege(
-    //     address _studentAddress,
-    //     string memory _collegename,
-    //     string memory _studentId,
-    //     string memory _name,
-    //     string memory _year,
-    //     string memory _course,
-    //     string memory _rollNo,
-    //     string memory _doj,
-    //     string[] memory _certs,
-    //     string[] memory _certNames,
-    //     string memory _certType
-    // ) public {
-    //     studentIndex[] memory index_Array = get_student_Index(_studentAddress);
-    //     if (index_Array.length != 0) {
-    //         for (i = 0; i <= index_Array.length; i++) {
-    //             if (index_Array[i].clgAddr == msg.sender) {
-    //                 studentDetails[msg.sender][index_Array[0].index][0]
-    //                     .collegeName = _collegename;
-    //                 studentDetails[msg.sender][index_Array[0].index][0]
-    //                     .ID = _studentId;
-    //                 studentDetails[msg.sender][index_Array[0].index][0]
-    //                     .name = _name;
-    //                 studentDetails[msg.sender][index_Array[0].index][0]
-    //                     .year = _year;
-    //                 studentDetails[msg.sender][index_Array[0].index][0]
-    //                     .course = _course;
-    //                 studentDetails[msg.sender][index_Array[0].index][0]
-    //                     .rollNo = _rollNo;
-    //                 studentDetails[msg.sender][index_Array[0].index][0]
-    //                     .DOJ = _doj;
-    //                 studentDetails[msg.sender][index_Array[0].index][0]
-    //                     .certs = _certs;
-    //                 studentDetails[msg.sender][index_Array[0].index][0]
-    //                     .certName = _certNames;
-    //                 studentDetails[msg.sender][index_Array[0].index][0]
-    //                     .certType = _certType;
-    //             }
-    //         }
-    //     } else {
-    //         // Remove below equation before testing, look at returned_Value function before removing this equation
-    //         colReq[msg.sender] = colReq[msg.sender] + 1;
-    //         Roles[
-    //             0xc951d7098b66ba0b8b77265b6e9cf0e187d73125a42bcd0061b09a68be421810
-    //         ][_studentAddress] = true;
-    //         /*
-    //          * Replace colReq[] mapping with studentDetails.length() before testing
-    //          */
-    //         studIndex[_studentAddress].push(
-    //             studentIndex(msg.sender, colReq[msg.sender])
-    //         );
-    //         studentDetails[msg.sender][colReq[msg.sender]].push(
-    //             student(
-    //                 _collegename,
-    //                 _studentId,
-    //                 _name,
-    //                 _year,
-    //                 _course,
-    //                 _rollNo,
-    //                 _doj,
-    //                 _certs,
-    //                 _certNames,
-    //                 _certType,
-    //                 block.timestamp,
-    //                 "COLLEGE",
-    //                 msg.sender,
-    //                 3
-    //             )
-    //         );
-    //     }
-    // }
+    function version() public pure returns (string memory) {
+        return "College Version 4";
+    }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     // COLLEGE SECTION
@@ -191,60 +123,47 @@ contract CollegeContract is variables, UUPSUpgradeable {
 
     function Add_Student_Certificates(
         address _collegeAddr,
-        address _studentWalletAddress,
+        // address _studentWalletAddress,
         string[] memory _certs,
         string[] memory _certNames,
         string memory _certType,
         student2 memory studentStruct2 // student memory studentStruct // , // student2 memory studentStruct2
     ) public {
-        studentIndex[] memory index_Array = get_student_Index(
-            _studentWalletAddress
-        );
-        uint256 i;
-        address collegeAddr;
-
-        for (i = 0; i <= index_Array.length; i++) {
-            if (index_Array[i].clgAddr == _collegeAddr) {
-                collegeAddr = _collegeAddr;
-            }
+        // (address collegeAddr, uint32 _verified, string memory _role, uint256 collegeCount) = add_cert_helper(_collegeAddr, _studentWalletAddress);
+        string memory _role = walletReg();
+        uint32 _verified = 1;
+        // if (collegeAddr != _collegeAddr) {
+        if (
+            keccak256(abi.encodePacked(_role)) ==
+            keccak256(abi.encodePacked("COLLEGE_WAITING"))
+        ) {
+            _verified = 2;
         }
-        if (collegeAddr != _collegeAddr) {
-            // Remove below equation before testing if it is not required, look at returned_Value function before removing this equation
-            uint256 collegeCount = colReq[collegeAddr] + 1;
-            string memory _role = checkAddress(msg.sender);
-            uint32 _verified = 1;
-            if (
-                keccak256(abi.encodePacked(_role)) ==
-                keccak256(abi.encodePacked("STUDENT"))
-            ) {
-                waiting[_studentWalletAddress] = "STUDENT_WAITING";
-            } else if (
-                keccak256(abi.encodePacked(_role)) ==
-                keccak256(abi.encodePacked("COLLEGE"))
-            ) {
-                Roles[
-                    0xc951d7098b66ba0b8b77265b6e9cf0e187d73125a42bcd0061b09a68be421810
-                ][_studentWalletAddress] = true;
-                _verified = 2;
-            }
-            /*
-             * Replace colReq[] mapping with studentDetails.length() before testing and check whether colReq[] mapping can be removed to save some gas.
-             */
-            studIndex[_studentWalletAddress].push(
-                studentIndex(collegeAddr, collegeCount)
-            );
-            studentDetails[collegeAddr][collegeCount].push(
+        /*
+         * Replace colReq[] mapping with studentDetails.length() before testing and check whether colReq[] mapping can be removed to save some gas.
+         */
+        // studIndex[_studentWalletAddress].push(
+        //     studentIndex(collegeAddr, collegeCount)
+        // );
+        if (
+            keccak256(abi.encodePacked(_role)) ==
+            keccak256(abi.encodePacked("STUDENT_WAITING")) ||
+            keccak256(abi.encodePacked(_role)) ==
+            keccak256(abi.encodePacked("COLLEGE_WAITING"))
+        ) {
+            uint256 collegeCount = colReq[_collegeAddr] + 1;
+            studentDetails[_collegeAddr][collegeCount].push(
                 student(
                     _certs,
                     _certNames,
                     _certType,
                     block.timestamp,
                     _role,
-                    collegeAddr,
+                    _collegeAddr,
                     _verified
                 )
             );
-            studentDetails2[collegeAddr][collegeCount].push(
+            studentDetails2[_collegeAddr][collegeCount].push(
                 student2(
                     studentStruct2.collegeName,
                     studentStruct2.ID,
@@ -258,6 +177,52 @@ contract CollegeContract is variables, UUPSUpgradeable {
         } else {
             revert STUDENT_ALREADY_EXIST();
         }
+    }
+
+    function add_cert_helper(
+        address _collegeAddr,
+        address _studentWalletAddress
+    )
+        public
+        returns (
+            address,
+            uint32,
+            string memory,
+            uint256
+        )
+    {
+        studentIndex[] memory index_Array = get_student_Index(
+            _studentWalletAddress
+        );
+        uint256 i;
+        address collegeAddr;
+        uint32 _verified = 1;
+        string memory _role;
+        uint256 collegeCount;
+
+        // student can have different colleges in his index array (school, intermediate, graduation, pg)
+        for (i = 0; i <= index_Array.length; i++) {
+            if (index_Array[i].clgAddr == _collegeAddr) {
+                collegeAddr = _collegeAddr;
+            }
+        }
+        if (collegeAddr != _collegeAddr) {
+            // Remove below equation before testing if it is not required, look at returned_Value function before removing this equation
+            collegeCount = colReq[collegeAddr] + 1;
+            _role = walletReg();
+            // change the role variable to STUDENT & COLLEGE after adding onlyRoles
+
+            if (
+                keccak256(abi.encodePacked(_role)) ==
+                keccak256(abi.encodePacked("COLLEGE_WAITING"))
+            ) {
+                Roles[
+                    0xc951d7098b66ba0b8b77265b6e9cf0e187d73125a42bcd0061b09a68be421810
+                ][_studentWalletAddress] = true;
+                _verified = 2;
+            }
+        }
+        return (collegeAddr, _verified, _role, collegeCount);
     }
 
     // function add_student_cert_helper(string memory _collegeName, string memory _ID, string memory _name, string memory _year, string memory _course, string memory _rollNo, string memory _doj) public returns(string, string, string, string, string, string) {
