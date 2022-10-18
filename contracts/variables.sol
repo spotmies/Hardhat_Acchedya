@@ -1,18 +1,10 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.7;
+pragma solidity ^0.8.4;
 
-// import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
-import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
-
-/// @title Acchedya College/Student Contract
-/// @author Hemanth Veeranala
-/// @notice This contract is used to store/update/retrieve the student details and college details
-/// @dev Go through the resources mentioned in the Docs folder before making any changes to the contract. This is a UUPS upgradable contract, so it is better to understand how upgrades work in solidity before making changes.
-
-contract variables is OwnableUpgradeable {
+contract variables is Ownable {
     using SafeMath for uint;
     using SafeMath for uint32;
     using SafeMath for uint256;
@@ -37,7 +29,7 @@ contract variables is OwnableUpgradeable {
     struct company {
         address companyWalAddress;
         string companyName;
-        string companyAddress;
+        string companyAddres;
         string companyPhone;
         string companyEmail;
         string companySector;
@@ -57,6 +49,13 @@ contract variables is OwnableUpgradeable {
     // /// // // // // // // // / /
 
     struct student {
+        string collegeName;
+        string ID;
+        string name;
+        string year;
+        string course;
+        string rollNo;
+        string DOJ;
         string[] certs;
         string[] certName;
         string certType;
@@ -66,20 +65,10 @@ contract variables is OwnableUpgradeable {
         uint32 verified;
     }
 
-    struct student2 {
-        string collegeName;
-        string ID;
-        string name;
-        string year;
-        string course;
-        string rollNo;
-        string DOJ;
-    }
-
     struct college {
         address collegeWalAddress;
         string collegeName;
-        string collegeAddress;
+        string collegeAddres;
         string collegePhone;
         string collegeEmail;
         uint32 collegeStatus;
@@ -91,33 +80,29 @@ contract variables is OwnableUpgradeable {
         uint256 index;
     }
 
-    mapping(address => uint256) internal collegeIndex;
-    mapping(address => uint256) internal companyIndex;
-
-    mapping(address => mapping(uint256 => student[])) internal studentDetails;
-    mapping(address => mapping(uint256 => student2[])) internal studentDetails2;
-    mapping(address => college[]) internal collegeDetails;
-    mapping(address => bool) internal CollegeAddress;
-    mapping(address => bool) internal CompanyAddress;
-    mapping(address => uint256) internal colReq;
-    mapping(address => studentIndex[]) internal studIndex;
-    mapping(address => uint256) internal userID;
+    mapping(address => mapping(uint256 => student[])) studentDetails;
+    mapping(address => college[]) collegeDetails;
+    mapping(address => bool) public CollegeAddress;
+    mapping(address => bool) public CompanyAddress;
+    mapping(address => uint256) colReq;
+    mapping(address => studentIndex[]) studIndex;
+    mapping(address => uint256) userID;
 
     // // // // // // // // //
     // company mappings
     // // // // // // // // //
 
-    mapping(bytes32 => mapping(address => bool)) internal Roles;
-    mapping(address => mapping(uint256 => employee[])) internal employeeCert;
-    mapping(address => company[]) internal companyDetails;
-    mapping(address => jobRequests[]) internal jobInvites;
-    mapping(address => string) internal waiting;
-    mapping(address => address[]) internal companyReqs;
+    mapping(bytes32 => mapping(address => bool)) public Roles;
+    mapping(address => mapping(uint256 => employee[])) employeeCert;
+    mapping(address => company[]) companyDetails;
+    mapping(address => jobRequests[]) jobInvites;
+    mapping(address => string) waiting;
+    mapping(address => address[]) companyReqs;
 
-    bytes32 internal constant COLLEGE = keccak256(abi.encodePacked("COLLEGE"));
-    bytes32 internal constant COMPANY = keccak256(abi.encodePacked("COMPANY"));
-    bytes32 internal constant STUDENT = keccak256(abi.encodePacked("STUDENT"));
-    bytes32 internal constant RETRIEVER =
+    bytes32 public constant COLLEGE = keccak256(abi.encodePacked("COLLEGE"));
+    bytes32 public constant COMPANY = keccak256(abi.encodePacked("COMPANY"));
+    bytes32 public constant STUDENT = keccak256(abi.encodePacked("STUDENT"));
+    bytes32 public constant RETRIEVER =
         keccak256(abi.encodePacked("RETRIEVER"));
 
     modifier onlyRole(bytes32 _role) {
@@ -125,7 +110,7 @@ contract variables is OwnableUpgradeable {
         _;
     }
 
-    function GrantRole(bytes32 _role, address _account) internal onlyOwner {
+    function GrantRole(bytes32 _role, address _account) public onlyOwner {
         Roles[_role][_account] = true;
     }
 

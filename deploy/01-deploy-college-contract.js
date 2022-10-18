@@ -1,33 +1,32 @@
+const { verify } = require("../hardhat.config");
+
 module.exports = async ({ getNamedAccounts, deployments }) => {
   const { deploy, log } = deployments;
   const { deployer } = await getNamedAccounts();
   log("Deploying College Contract...");
 
-  // const CollegeContract = await ethers.getContractFactory("CollegeContractV4");
-  // const CollegeContractProxy = await upgrades.deployProxy(CollegeContract, [], {
-  //   kind: "uups",
-  //   initializer: "initialize",
-  // });
+  const CollegeContract = await ethers.getContractFactory("Acchedya");
+  const CollegeContractProxy = await CollegeContract.deploy();
+  await CollegeContractProxy.deployed();
+  log("College Contract deployed to:", CollegeContractProxy.address);
 
-  // // const CollegeContract = await upgrades.deployProxy(CollegeContract, [], {
-  // //   initializer: "initialize",
-  // // });
-  // await CollegeContractProxy.deployed();
-  // log("Deployed College contract version 1 to:", CollegeContractProxy.address);
-
-  const CollegeContractV2 = await ethers.getContractFactory(
-    "CollegeContractV3"
-  );
-  const upgraded = await upgrades.upgradeProxy(
-    "0x790bF616BF7E5ab91e6c3209b389906eef6a5766",
-    CollegeContractV2,
-    { kind: "uups", call: "initialize" }
-  );
-  console.log(
-    `College Contract V2 is upgraded in proxy address: ${upgraded.address}`
-  );
-
-  await upgraded.deployed();
-  const newVersion = await upgraded.version();
-  log("version deployed:", newVersion);
+  await CollegeContractProxy.deployTransaction.wait(6);
+  await verifying(CollegeContractProxy.address, []);
+  console.log("College contract verified");
 };
+
+async function verifying(contractAddress, args) {
+  console.log("Verifying contract...");
+  try {
+    await run("verify:verify", {
+      address: contractAddress,
+      constructorArguments: args,
+    });
+  } catch (e) {
+    if (e.message.includes("Contract source code already verified")) {
+      console.log("Contract source code already verified");
+    } else {
+      console.log(e.message);
+    }
+  }
+}
