@@ -3,7 +3,7 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
   const { deployer } = await getNamedAccounts();
   log("Deploying College Contract...");
 
-  const CollegeContract = await ethers.getContractFactory("CollegeContractV4");
+  const CollegeContract = await ethers.getContractFactory("College_Contract");
   const CollegeContractProxy = await upgrades.deployProxy(CollegeContract, [], {
     kind: "uups",
     initializer: "initialize",

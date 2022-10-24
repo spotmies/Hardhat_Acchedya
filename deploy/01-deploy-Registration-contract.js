@@ -1,7 +1,7 @@
 module.exports = async ({ getNamedAccounts, deployments }) => {
   const { deploy, log } = deployments;
   const { deployer } = await getNamedAccounts();
-  log("Deploying College Contract...");
+  log("Deploying Registration Contract...");
 
   const RegistrationsContract = await ethers.getContractFactory(
     "Registrations"
@@ -20,7 +20,7 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
   // // });
   await RegistrationsContractProxy.deployed();
   log(
-    "Deployed College contract version 1 to:",
+    "Deployed Registrations contract to:",
     RegistrationsContractProxy.address
   );
 

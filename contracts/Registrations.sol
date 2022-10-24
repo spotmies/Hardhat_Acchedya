@@ -3,8 +3,8 @@ pragma solidity ^0.8.7;
 
 // import "@openzeppelin/contracts/access/Ownable.sol";
 import "./variables.sol";
-import "./CollegeVariables.sol";
-import "./companyVariables.sol";
+import "./College/CollegeVariables.sol";
+import "./Company/companyVariables.sol";
 
 import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 // import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
