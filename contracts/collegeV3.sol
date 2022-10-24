@@ -3,6 +3,7 @@ pragma solidity ^0.8.7;
 
 // import "@openzeppelin/contracts/access/Ownable.sol";
 import "./variables.sol";
+import "./CollegeVariables.sol";
 
 import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 // import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
@@ -16,8 +17,8 @@ error YOUR_PROFILE_VERIFICATION_PENDING();
 /// @notice This contract is used to store/update/retrieve the student details and college details
 /// @dev Go through the resources mentioned in the Docs folder before making any changes to the contract. This is a UUPS upgradable contract, so it is better to understand how upgrades work in solidity before making changes.
 
-contract CollegeContractV3 is variables, UUPSUpgradeable {
-    function initialize() public reinitializer(4) {
+contract CollegeContractV3 is variables, CollegeVariables, UUPSUpgradeable {
+    function initialize() public initializer {
         ///@dev as there is no constructor, we need to initialise the OwnableUpgradeable explicitly
         __Ownable_init();
     }
@@ -27,76 +28,6 @@ contract CollegeContractV3 is variables, UUPSUpgradeable {
 
     function version() public pure returns (string memory) {
         return "College Version 4";
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-    // COLLEGE SECTION
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-
-    /// @notice  This function is used to add a college to the contract.
-    /// @param _collegeAddr wallet address of the college
-    /// @param _address physical address of the college
-
-    function Add_College(
-        address _collegeAddr,
-        string memory _collegeName,
-        string memory _address,
-        string memory _phone,
-        string memory _email,
-        uint32 _status
-    ) public {
-        address collegeWalletAddress = _collegeAddr;
-        address theOwner = owner();
-        uint256 index = collegeIndex[msg.sender];
-
-        if (index == 0) {
-            waiting[msg.sender] = "COLLEGE_WAITING";
-            collegeIndex[collegeWalletAddress] = collegeDetails[theOwner]
-                .length;
-            collegeDetails[theOwner].push(
-                college(
-                    collegeWalletAddress,
-                    _collegeName,
-                    _address,
-                    _phone,
-                    _email,
-                    _status,
-                    msg.sender
-                )
-            );
-        } else if (
-            collegeDetails[theOwner][index].collegeStatus == 2 ||
-            collegeDetails[theOwner][index].collegeStatus == 3
-        ) {
-            collegeDetails[theOwner][index].collegeName = _collegeName;
-            collegeDetails[theOwner][index].collegeAddress = _address;
-            collegeDetails[theOwner][index].collegePhone = _phone;
-            collegeDetails[theOwner][index].collegeEmail = _email;
-            collegeDetails[theOwner][index].collegeStatus = _status;
-        } else {
-            revert YOUR_PROFILE_VERIFICATION_PENDING();
-        }
-    }
-
-    /// @notice  This function is used to verify college and only admin can call this function (onlyOwner modifier might not be appeared during testing phase).
-    /// @param _index of the college in the collegeDetails mapping
-    /// @param code 1 for pending, 2 for verified, 3 for rejected
-
-    function verifyCollege(
-        uint32 _index,
-        uint32 code,
-        address clgAddr
-    ) public onlyOwner {
-        collegeDetails[msg.sender][_index].collegeStatus = code;
-        //grant role
-        GrantRole(
-            0x112ca87938ff9caa27257dbd0ca0f4fabbcf5fd4948bc02864cc3fbce825277f,
-            clgAddr
-        );
-        GrantRole(
-            0x02045258af11576776f56337f0666fcac2b654a57c15c8a528e83f2b72f40eef,
-            clgAddr
-        );
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////

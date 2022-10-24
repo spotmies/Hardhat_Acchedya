@@ -17,102 +17,20 @@ contract variables is OwnableUpgradeable {
     using SafeMath for uint32;
     using SafeMath for uint256;
 
-    ////////////////////////////////
-    // company variables
-    ////////////////////////////////
-
-    struct employee {
-        string joiningDate;
-        string leftDate;
-        string designation;
-        uint256 timestamp;
-        string[] certs;
-        string[] certName;
-        string certType;
-        string AddedBy;
-        address companyAdd;
-        uint32 verified;
-    }
-
-    struct company {
-        address companyWalAddress;
-        string companyName;
-        string companyAddress;
-        string companyPhone;
-        string companyEmail;
-        string companySector;
-        uint256 companyStatus;
-        address access;
-    }
-
-    struct jobRequests {
-        address companyAddress;
-        address employeeAddress;
-        string companyName;
-        string employeeName;
-        string reasonForInvitation;
-        uint32 status;
-    }
-
-    // /// // // // // // // // / /
-
-    struct student {
-        string[] certs;
-        string[] certName;
-        string certType;
-        uint256 timestamp;
-        string AddedBy;
-        address collegeAdd;
-        uint32 verified;
-    }
-
-    struct student2 {
-        string collegeName;
-        string ID;
-        string name;
-        string year;
-        string course;
-        string rollNo;
-        string DOJ;
-    }
-
-    struct college {
-        address collegeWalAddress;
-        string collegeName;
-        string collegeAddress;
-        string collegePhone;
-        string collegeEmail;
-        uint32 collegeStatus;
-        address access;
-    }
-
     struct studentIndex {
         address clgAddr;
         uint256 index;
     }
 
-    mapping(address => uint256) internal collegeIndex;
-    mapping(address => uint256) internal companyIndex;
-
-    mapping(address => mapping(uint256 => student[])) internal studentDetails;
-    mapping(address => mapping(uint256 => student2[])) internal studentDetails2;
-    mapping(address => college[]) internal collegeDetails;
-    mapping(address => bool) internal CollegeAddress;
-    mapping(address => bool) internal CompanyAddress;
-    mapping(address => uint256) internal colReq;
     mapping(address => studentIndex[]) internal studIndex;
-    mapping(address => uint256) internal userID;
+    // mapping(address => uint256) internal userID;
 
     // // // // // // // // //
-    // company mappings
+    // common mappings
     // // // // // // // // //
+    mapping(address => string) internal waiting;
 
     mapping(bytes32 => mapping(address => bool)) internal Roles;
-    mapping(address => mapping(uint256 => employee[])) internal employeeCert;
-    mapping(address => company[]) internal companyDetails;
-    mapping(address => jobRequests[]) internal jobInvites;
-    mapping(address => string) internal waiting;
-    mapping(address => address[]) internal companyReqs;
 
     bytes32 internal constant COLLEGE = keccak256(abi.encodePacked("COLLEGE"));
     bytes32 internal constant COMPANY = keccak256(abi.encodePacked("COMPANY"));

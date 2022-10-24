@@ -3,6 +3,7 @@ pragma solidity ^0.8.7;
 
 // import "@openzeppelin/contracts/access/Ownable.sol";
 import "./variables.sol";
+import "./companyVariables.sol";
 
 import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
@@ -16,7 +17,7 @@ error You_Cannot_Access_The_Data();
 /// @notice This contract is used to store/update/retrieve the student details and college details
 /// @dev Go through the resources mentioned in the Docs folder before making any changes to the contract. This is a UUPS upgradable contract, so it is better to understand how upgrades work in solidity before making changes.
 
-contract CompanyContract is variables, UUPSUpgradeable {
+contract CompanyContract is variables, CompanyVariables, UUPSUpgradeable {
     function initialize() public initializer {
         ///@dev as there is no constructor, we need to initialise the OwnableUpgradeable explicitly
         __Ownable_init();
@@ -28,76 +29,6 @@ contract CompanyContract is variables, UUPSUpgradeable {
     // // // // // //
     // COMPANY SECTION
     // // // // // //
-
-    /// @notice This function is used to add a company to the contract.
-    /// @param _companyAddr: wallet address of the company
-    /// @param _address: physical address of the company
-
-    function AddCompany(
-        address _companyAddr,
-        string memory _companyName,
-        string memory _address,
-        string memory _phone,
-        string memory _email,
-        string memory _sector,
-        uint32 _status
-    ) public {
-        address companyWalletAddress = _companyAddr;
-        address theOwner = owner();
-        uint256 index = companyIndex[msg.sender];
-
-        if (index == 0) {
-            companyIndex[companyWalletAddress] = companyDetails[theOwner]
-                .length;
-            waiting[msg.sender] = "COMPANY_WAITING";
-            companyDetails[theOwner].push(
-                company(
-                    companyWalletAddress,
-                    _companyName,
-                    _address,
-                    _phone,
-                    _email,
-                    _sector,
-                    _status,
-                    msg.sender
-                )
-            );
-        } else if (
-            companyDetails[theOwner][index].companyStatus == 2 ||
-            companyDetails[theOwner][index].companyStatus == 3
-        ) {
-            companyDetails[theOwner][index].companyName = _companyName;
-            companyDetails[theOwner][index].companyAddress = _address;
-            companyDetails[theOwner][index].companyPhone = _phone;
-            companyDetails[theOwner][index].companyEmail = _email;
-            companyDetails[theOwner][index].companySector = _sector;
-            companyDetails[theOwner][index].companyStatus = _status;
-            companyDetails[theOwner][index].access = msg.sender;
-        } else {
-            revert YOUR_PROFILE_VERIFICATION_PENDING();
-        }
-    }
-
-    /// @notice This function is used to verify company and only admin can call this function (onlyOwner modifier might not be appeared during testing phase).
-    /// @param _index: index of the college in the companyDetails mapping
-    /// @param code: 1 for pending, 2 for verified, 3 for rejected
-
-    function verifyCompany(
-        uint256 _index,
-        uint256 code,
-        address cmpAddr
-    ) public onlyOwner {
-        companyDetails[msg.sender][_index].companyStatus = code;
-        //grant role
-        GrantRole(
-            0x6b930a54bc9a8d9d32021a28e2282ffedf33210754271fcab1eb90abc2021a1c,
-            cmpAddr
-        );
-        GrantRole(
-            0x02045258af11576776f56337f0666fcac2b654a57c15c8a528e83f2b72f40eef,
-            cmpAddr
-        );
-    }
 
     function AddEmployeeCert(
         address _studentAddress,
@@ -117,11 +48,12 @@ contract CompanyContract is variables, UUPSUpgradeable {
             keccak256(abi.encodePacked("STUDENT"))
         ) {
             _verify = 1;
+            xpCerts[_companyAddress].push(_studentAddress);
         } else if (
             keccak256(abi.encodePacked(_role)) ==
             keccak256(abi.encodePacked("COMPANY"))
         ) {
-            _verify = 3;
+            _verify = 2;
         }
 
         if (
@@ -149,6 +81,12 @@ contract CompanyContract is variables, UUPSUpgradeable {
         }
     }
 
+    // Companies will already have access to their employees data. They list unverified employee certs and the company admin verifies them.
+
+    function verifyXpCert(address _studentAddress) public {
+        employeeCert[_studentAddress][0][0].verified = 2;
+    }
+
     function update_employee_cert(
         address _studentAddress,
         address _companyAddress,
@@ -171,7 +109,7 @@ contract CompanyContract is variables, UUPSUpgradeable {
             keccak256(abi.encodePacked(_role)) ==
             keccak256(abi.encodePacked("COMPANY"))
         ) {
-            _verify = 3;
+            _verify = 2;
         }
 
         if (
