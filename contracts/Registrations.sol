@@ -12,6 +12,7 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 error YOU_ARE_NOT_AUTHORIZED_TO_UPDATE();
 error STUDENT_ALREADY_EXIST();
 error YOUR_PROFILE_VERIFICATION_PENDING();
+error You_are_not_the_owner();
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 // COLLEGE SECTION
@@ -174,5 +175,49 @@ contract Registrations is
             0x02045258af11576776f56337f0666fcac2b654a57c15c8a528e83f2b72f40eef,
             cmpAddr
         );
+    }
+
+    ////////////////////////////////////////////////////////
+    //// VIEW FUNCTIONS
+    ////////////////////////////////////////////////////////
+
+    function getCollege() public view returns (college[] memory) {
+        uint i;
+        address theOwner = owner();
+        uint256 len = collegeDetails[theOwner].length;
+        college[] memory collegeDet = new college[](len);
+
+        for (i = 0; i < len; i++) {
+            if (msg.sender != owner()) {
+                if (msg.sender == collegeDetails[theOwner][i].access) {
+                    collegeDet[i] = collegeDetails[theOwner][i];
+                }
+            } else {
+                require(msg.sender == owner(), "You are not the owner.");
+                collegeDet[i] = collegeDetails[theOwner][i];
+            }
+        }
+        return (collegeDet);
+    }
+
+    function getCompaniesToOwner() public view returns (company[] memory) {
+        uint256 i;
+        address theOwner = owner();
+        uint256 len = companyDetails[theOwner].length;
+        company[] memory companyDet = new company[](len);
+
+        for (i = 0; i < len; i++) {
+            if (msg.sender != owner()) {
+                if (msg.sender == companyDetails[theOwner][i].access) {
+                    companyDet[i] = companyDetails[theOwner][i];
+                }
+            } else {
+                if (msg.sender != owner()) {
+                    revert You_are_not_the_owner();
+                }
+                companyDet[i] = companyDetails[theOwner][i];
+            }
+        }
+        return (companyDet);
     }
 }

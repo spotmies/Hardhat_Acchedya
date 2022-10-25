@@ -235,23 +235,4 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
     function total_students_for_college() public view returns (uint256) {
         return (colReq[msg.sender]);
     }
-
-    function getCollege() public view returns (college[] memory) {
-        uint i;
-        address theOwner = owner();
-        uint256 len = collegeDetails[theOwner].length;
-        college[] memory collegeDet = new college[](len);
-
-        for (i = 0; i < len; i++) {
-            if (msg.sender != owner()) {
-                if (msg.sender == collegeDetails[theOwner][i].access) {
-                    collegeDet[i] = collegeDetails[theOwner][i];
-                }
-            } else {
-                require(msg.sender == owner(), "You are not the owner.");
-                collegeDet[i] = collegeDetails[theOwner][i];
-            }
-        }
-        return (collegeDet);
-    }
 }

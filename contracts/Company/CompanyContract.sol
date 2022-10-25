@@ -177,27 +177,6 @@ contract CompanyContract is variables, CompanyVariables, UUPSUpgradeable {
     //// VIEW FUNCTIONS
     ////////////////////////////////////////////////////////
 
-    function getCompaniesToOwner() public view returns (company[] memory) {
-        uint256 i;
-        address theOwner = owner();
-        uint256 len = companyDetails[theOwner].length;
-        company[] memory companyDet = new company[](len);
-
-        for (i = 0; i < len; i++) {
-            if (msg.sender != owner()) {
-                if (msg.sender == companyDetails[theOwner][i].access) {
-                    companyDet[i] = companyDetails[theOwner][i];
-                }
-            } else {
-                if (msg.sender != owner()) {
-                    revert You_are_not_the_owner();
-                }
-                companyDet[i] = companyDetails[theOwner][i];
-            }
-        }
-        return (companyDet);
-    }
-
     function getEmpAddr() public view returns (address[] memory) {
         return (companyReqs[msg.sender]);
     }
