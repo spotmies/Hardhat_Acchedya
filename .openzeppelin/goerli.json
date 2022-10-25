@@ -45,6 +45,11 @@
       "address": "0x1feD7A2fb0594e9Dc446375d7A8356Bddb27e033",
       "txHash": "0xe86de66ff1b206bb8be655b132aecdf634c07140548d6cf1dd96bedc53269759",
       "kind": "uups"
+    },
+    {
+      "address": "0x768c3AE6233537626A314A10c67cF74dbFDd1f48",
+      "txHash": "0x583e31052022b73b25c5745468a94593e8804882b2fabfc1a77512a85822e881",
+      "kind": "uups"
     }
   ],
   "impls": {
@@ -8186,7 +8191,7 @@
     },
     "e75bd1d43a88b9070fe5339a536491c95ebcd872da8bebbd8a2c33263c9e3f21": {
       "address": "0x125406944486600d13Ba8f035695fbE8878d9bFa",
-      "txHash": "0xd8b6482b426930e9d8a2e08990b816aa1fc372e4eda83374c6f693d55e8911c5",
+      "txHash": "0xb6b8809e46f256388aeb461e93a642c2028b7e5540748ff4675694434c2f27d8",
       "layout": {
         "solcVersion": "0.8.7",
         "storage": [
