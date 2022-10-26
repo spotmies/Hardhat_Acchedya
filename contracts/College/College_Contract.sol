@@ -54,7 +54,7 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
 
     function Add_Student_Certificates(
         address _collegeAddr,
-        // address _studentWalletAddress,
+        address _studentWalletAddress,
         string memory _role,
         string[] memory _certs,
         string[] memory _certNames,
@@ -84,6 +84,9 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
             keccak256(abi.encodePacked("COLLEGE_WAITING"))
         ) {
             uint256 collegeCount = colReq[_collegeAddr] + 1;
+            studIndex[_studentWalletAddress].push(
+                studentIndex(_collegeAddr, collegeCount)
+            );
             studentDetails[_collegeAddr][collegeCount].push(
                 student(
                     _certs,
@@ -111,51 +114,51 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
         }
     }
 
-    function add_cert_helper(
-        address _collegeAddr,
-        address _studentWalletAddress
-    )
-        public
-        returns (
-            address,
-            uint32,
-            string memory,
-            uint256
-        )
-    {
-        studentIndex[] memory index_Array = get_student_Index(
-            _studentWalletAddress
-        );
-        uint256 i;
-        address collegeAddr;
-        uint32 _verified = 1;
-        string memory _role;
-        uint256 collegeCount;
+    // function add_cert_helper(
+    //     address _collegeAddr,
+    //     address _studentWalletAddress
+    // )
+    //     public
+    //     returns (
+    //         address,
+    //         uint32,
+    //         string memory,
+    //         uint256
+    //     )
+    // {
+    //     studentIndex[] memory index_Array = get_student_Index(
+    //         _studentWalletAddress
+    //     );
+    //     uint256 i;
+    //     address collegeAddr;
+    //     uint32 _verified = 1;
+    //     string memory _role;
+    //     uint256 collegeCount;
 
-        // student can have different colleges in his index array (school, intermediate, graduation, pg)
-        for (i = 0; i <= index_Array.length; i++) {
-            if (index_Array[i].clgAddr == _collegeAddr) {
-                collegeAddr = _collegeAddr;
-            }
-        }
-        if (collegeAddr != _collegeAddr) {
-            // Remove below equation before testing if it is not required, look at returned_Value function before removing this equation
-            collegeCount = colReq[collegeAddr] + 1;
-            _role = walletReg();
-            // change the role variable to STUDENT & COLLEGE after adding onlyRoles
+    //     // student can have different colleges in his index array (school, intermediate, graduation, pg)
+    //     for (i = 0; i <= index_Array.length; i++) {
+    //         if (index_Array[i].clgAddr == _collegeAddr) {
+    //             collegeAddr = _collegeAddr;
+    //         }
+    //     }
+    //     if (collegeAddr != _collegeAddr) {
+    //         // Remove below equation before testing if it is not required, look at returned_Value function before removing this equation
+    //         collegeCount = colReq[collegeAddr] + 1;
+    //         _role = walletReg();
+    //         // change the role variable to STUDENT & COLLEGE after adding onlyRoles
 
-            if (
-                keccak256(abi.encodePacked(_role)) ==
-                keccak256(abi.encodePacked("COLLEGE_WAITING"))
-            ) {
-                Roles[
-                    0xc951d7098b66ba0b8b77265b6e9cf0e187d73125a42bcd0061b09a68be421810
-                ][_studentWalletAddress] = true;
-                _verified = 2;
-            }
-        }
-        return (collegeAddr, _verified, _role, collegeCount);
-    }
+    //         if (
+    //             keccak256(abi.encodePacked(_role)) ==
+    //             keccak256(abi.encodePacked("COLLEGE_WAITING"))
+    //         ) {
+    //             Roles[
+    //                 0xc951d7098b66ba0b8b77265b6e9cf0e187d73125a42bcd0061b09a68be421810
+    //             ][_studentWalletAddress] = true;
+    //             _verified = 2;
+    //         }
+    //     }
+    //     return (collegeAddr, _verified, _role, collegeCount);
+    // }
 
     // function add_student_cert_helper(string memory _collegeName, string memory _ID, string memory _name, string memory _year, string memory _course, string memory _rollNo, string memory _doj) public returns(string, string, string, string, string, string) {
     //     return (_collegeName, _ID, _name, _year, _course, _rollNo, _doj);
