@@ -18,7 +18,7 @@ error YOUR_PROFILE_VERIFICATION_PENDING();
 /// @dev Go through the resources mentioned in the Docs folder before making any changes to the contract. This is a UUPS upgradable contract, so it is better to understand how upgrades work in solidity before making changes.
 
 contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
-    function initialize() public initializer {
+    function initialize() public reinitializer(2) {
         ///@dev as there is no constructor, we need to initialise the OwnableUpgradeable explicitly
         __Ownable_init();
     }
@@ -83,11 +83,11 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
             keccak256(abi.encodePacked(_role)) ==
             keccak256(abi.encodePacked("COLLEGE_WAITING"))
         ) {
-            uint256 collegeCount = colReq[_collegeAddr] + 1;
+            colReq[_collegeAddr] = colReq[_collegeAddr] + 1;
             studIndex[_studentWalletAddress].push(
-                studentIndex(_collegeAddr, collegeCount)
+                studentIndex(_collegeAddr, colReq[_collegeAddr])
             );
-            studentDetails[_collegeAddr][collegeCount].push(
+            studentDetails[_collegeAddr][colReq[_collegeAddr]].push(
                 student(
                     _certs,
                     _certNames,
@@ -98,7 +98,7 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
                     _verified
                 )
             );
-            studentDetails2[_collegeAddr][collegeCount].push(
+            studentDetails2[_collegeAddr][colReq[_collegeAddr]].push(
                 student2(
                     studentStruct2.collegeName,
                     studentStruct2.ID,
