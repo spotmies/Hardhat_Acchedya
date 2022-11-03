@@ -21,6 +21,13 @@ contract CompanyVariables is OwnableUpgradeable {
     // company variables
     ////////////////////////////////
 
+    struct certificates {
+        string cid;
+        string certName;
+        string certHash;
+        string certType;
+    }
+
     struct employee {
         string joiningDate;
         string leftDate;
@@ -29,6 +36,7 @@ contract CompanyVariables is OwnableUpgradeable {
         string[] certs;
         string[] certName;
         string certType;
+        // certificates[] empCerts;
         string AddedBy;
         address companyAdd;
         uint32 verified;

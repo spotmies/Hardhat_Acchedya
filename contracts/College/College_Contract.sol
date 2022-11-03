@@ -18,7 +18,7 @@ error YOUR_PROFILE_VERIFICATION_PENDING();
 /// @dev Go through the resources mentioned in the Docs folder before making any changes to the contract. This is a UUPS upgradable contract, so it is better to understand how upgrades work in solidity before making changes.
 
 contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
-    function initialize() public reinitializer(2) {
+    function initialize() public reinitializer(1) {
         ///@dev as there is no constructor, we need to initialise the OwnableUpgradeable explicitly
         __Ownable_init();
     }
@@ -169,44 +169,43 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
 
     function update_student_certificates(
         address _collegeAddr,
-        address _studentWalletAddress,
-        student2 memory studentStruct,
+        // address _studentWalletAddress,
+        // uint256 _index,
         string[] memory _certs,
         string[] memory _certNames,
-        string memory _certType
+        string memory _certType,
+        student2 memory studentStruct
     ) public {
-        studentIndex[] memory index_Array = get_student_Index(
-            _studentWalletAddress
-        );
+        // studentIndex[] memory index_Array = get_student_Index(
+        //     _studentWalletAddress
+        // );
         string memory _role = checkAddress(msg.sender);
         address college = _collegeAddr;
-        if (index_Array.length != 0 && index_Array[0].clgAddr == college) {
-            if (
-                keccak256(abi.encodePacked(_role)) !=
-                keccak256(abi.encodePacked("STUDENT")) ||
-                keccak256(abi.encodePacked(_role)) ==
-                keccak256(abi.encodePacked("COLLEGE"))
-            ) {
-                studentDetails2[college][index_Array[0].index][0]
-                    .collegeName = studentStruct.collegeName;
-                studentDetails2[college][index_Array[0].index][0]
-                    .ID = studentStruct.ID;
-                studentDetails2[college][index_Array[0].index][0]
-                    .name = studentStruct.name;
-                studentDetails2[college][index_Array[0].index][0]
-                    .year = studentStruct.year;
-                studentDetails2[college][index_Array[0].index][0]
-                    .course = studentStruct.course;
-                studentDetails2[college][index_Array[0].index][0]
-                    .rollNo = studentStruct.rollNo;
-                studentDetails2[college][index_Array[0].index][0]
-                    .DOJ = studentStruct.DOJ;
-                studentDetails[college][index_Array[0].index][0].certs = _certs;
-                studentDetails[college][index_Array[0].index][0]
-                    .certName = _certNames;
-                studentDetails[college][index_Array[0].index][0]
-                    .certType = _certType;
-            }
+        // return "commented item range";
+        // if (index_Array.length != 0 && index_Array[0].clgAddr == college) {
+        if (
+            keccak256(abi.encodePacked(_role)) ==
+            keccak256(abi.encodePacked("STUDENT")) ||
+            keccak256(abi.encodePacked(_role)) ==
+            keccak256(abi.encodePacked("COLLEGE")) ||
+            keccak256(abi.encodePacked(_role)) ==
+            keccak256(abi.encodePacked("STUDENT_WAITING")) ||
+            keccak256(abi.encodePacked(_role)) ==
+            keccak256(abi.encodePacked("COLLEGE_WAITING"))
+        ) {
+            studentDetails2[college][1][0].collegeName = studentStruct
+                .collegeName;
+            studentDetails2[college][1][0].ID = studentStruct.ID;
+            studentDetails2[college][1][0].name = studentStruct.name;
+            studentDetails2[college][1][0].year = studentStruct.year;
+            studentDetails2[college][1][0].course = studentStruct.course;
+            studentDetails2[college][1][0].rollNo = studentStruct.rollNo;
+            studentDetails2[college][1][0].DOJ = studentStruct.DOJ;
+            studentDetails[college][1][0].certs = _certs;
+            studentDetails[college][1][0].certName = _certNames;
+            studentDetails[college][1][0].certType = _certType;
+            // require(1 == 2, "commented item range");
+            // }
         } else {
             revert YOU_ARE_NOT_AUTHORIZED_TO_UPDATE();
         }
