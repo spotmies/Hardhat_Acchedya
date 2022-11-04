@@ -26,6 +26,8 @@ contract CompanyVariables is OwnableUpgradeable {
         string certName;
         string certHash;
         string certType;
+        string certKeys;
+        string Version;
     }
 
     struct employee {

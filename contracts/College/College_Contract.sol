@@ -18,7 +18,7 @@ error YOUR_PROFILE_VERIFICATION_PENDING();
 /// @dev Go through the resources mentioned in the Docs folder before making any changes to the contract. This is a UUPS upgradable contract, so it is better to understand how upgrades work in solidity before making changes.
 
 contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
-    function initialize() public reinitializer(1) {
+    function initialize() public initializer {
         ///@dev as there is no constructor, we need to initialise the OwnableUpgradeable explicitly
         __Ownable_init();
     }
@@ -58,6 +58,7 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
         string memory _role,
         string[] memory _certs,
         string[] memory _certNames,
+        string[] memory _secretKeys,
         string memory _certType,
         student2 memory studentStruct2 // student memory studentStruct // , // student2 memory studentStruct2
     ) public {
@@ -91,6 +92,7 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
                 student(
                     _certs,
                     _certNames,
+                    _secretKeys,
                     _certType,
                     block.timestamp,
                     _role,
@@ -173,6 +175,7 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
         // uint256 _index,
         string[] memory _certs,
         string[] memory _certNames,
+        string[] memory _secretKeys,
         string memory _certType,
         student2 memory studentStruct
     ) public {
@@ -203,6 +206,7 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
             studentDetails2[college][1][0].DOJ = studentStruct.DOJ;
             studentDetails[college][1][0].certs = _certs;
             studentDetails[college][1][0].certName = _certNames;
+            studentDetails[college][1][0].secretKeys = _secretKeys;
             studentDetails[college][1][0].certType = _certType;
             // require(1 == 2, "commented item range");
             // }

@@ -20,6 +20,7 @@ contract CollegeVariables is OwnableUpgradeable {
     struct student {
         string[] certs;
         string[] certName;
+        string[] secretKeys;
         string certType;
         uint256 timestamp;
         string AddedBy;
