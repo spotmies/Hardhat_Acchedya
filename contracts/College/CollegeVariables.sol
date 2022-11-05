@@ -17,11 +17,17 @@ contract CollegeVariables is OwnableUpgradeable {
     using SafeMath for uint32;
     using SafeMath for uint256;
 
-    struct student {
-        string[] certs;
-        string[] certName;
-        string[] secretKeys;
+    struct student_certs {
+        string certsHash;
+        string certName;
+        string secretKeys;
+        string Version;
+        uint certIndex;
         string certType;
+    }
+
+    struct student {
+        student_certs[] certs;
         uint256 timestamp;
         string AddedBy;
         address collegeAdd;

@@ -18,7 +18,7 @@ error YOUR_PROFILE_VERIFICATION_PENDING();
 /// @dev Go through the resources mentioned in the Docs folder before making any changes to the contract. This is a UUPS upgradable contract, so it is better to understand how upgrades work in solidity before making changes.
 
 contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
-    function initialize() public initializer {
+    function initialize() public reinitializer(8) {
         ///@dev as there is no constructor, we need to initialise the OwnableUpgradeable explicitly
         __Ownable_init();
     }
@@ -56,10 +56,10 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
         address _collegeAddr,
         address _studentWalletAddress,
         string memory _role,
-        string[] memory _certs,
-        string[] memory _certNames,
-        string[] memory _secretKeys,
-        string memory _certType,
+        student_certs[] memory _certs,
+        // string[] memory _certNames,
+        // string[] memory _secretKeys,
+        // string memory _certType,
         student2 memory studentStruct2 // student memory studentStruct // , // student2 memory studentStruct2
     ) public {
         // (address collegeAddr, uint32 _verified, string memory _role, uint256 collegeCount) = add_cert_helper(_collegeAddr, _studentWalletAddress);
@@ -89,16 +89,7 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
                 studentIndex(_collegeAddr, colReq[_collegeAddr])
             );
             studentDetails[_collegeAddr][colReq[_collegeAddr]].push(
-                student(
-                    _certs,
-                    _certNames,
-                    _secretKeys,
-                    _certType,
-                    block.timestamp,
-                    _role,
-                    _collegeAddr,
-                    _verified
-                )
+                student(_certs, block.timestamp, _role, _collegeAddr, _verified)
             );
             studentDetails2[_collegeAddr][colReq[_collegeAddr]].push(
                 student2(
@@ -169,21 +160,33 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
     /// @notice This function is used to update student certificates and students/colleges can call this function (onlyRole modifier might not appear during testing).
     /// @notice The structs below student & student2 are intentionally seperated to avoid stack too deep error. Do not merge them into a single struct in future.
 
-    function update_student_certificates(
+    function update_certificates(
         address _collegeAddr,
         // address _studentWalletAddress,
-        // uint256 _index,
-        string[] memory _certs,
-        string[] memory _certNames,
-        string[] memory _secretKeys,
-        string memory _certType,
+        uint256 _index,
+        uint _certIndex,
+        string memory _role,
+        student_certs[] memory _certs,
+        // string[] memory _certNames,
+        // string[] memory _secretKeys,
+        // string memory _certType,
         student2 memory studentStruct
     ) public {
         // studentIndex[] memory index_Array = get_student_Index(
         //     _studentWalletAddress
         // );
-        string memory _role = checkAddress(msg.sender);
+        // string memory _role = checkAddress(msg.sender);
         address college = _collegeAddr;
+        uint256 index = _index;
+        uint i;
+        uint certIndex;
+
+        for (i = 0; i <= studentDetails[college][index].length; i++) {
+            if (studentDetails[college][index][i].certIndex == _certIndex) {
+                certIndex = _certIndex;
+                return;
+            }
+        }
         // return "commented item range";
         // if (index_Array.length != 0 && index_Array[0].clgAddr == college) {
         if (
@@ -195,19 +198,24 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
             keccak256(abi.encodePacked("STUDENT_WAITING")) ||
             keccak256(abi.encodePacked(_role)) ==
             keccak256(abi.encodePacked("COLLEGE_WAITING"))
+            // college != address(0)
         ) {
-            studentDetails2[college][1][0].collegeName = studentStruct
-                .collegeName;
-            studentDetails2[college][1][0].ID = studentStruct.ID;
-            studentDetails2[college][1][0].name = studentStruct.name;
-            studentDetails2[college][1][0].year = studentStruct.year;
-            studentDetails2[college][1][0].course = studentStruct.course;
-            studentDetails2[college][1][0].rollNo = studentStruct.rollNo;
-            studentDetails2[college][1][0].DOJ = studentStruct.DOJ;
-            studentDetails[college][1][0].certs = _certs;
-            studentDetails[college][1][0].certName = _certNames;
-            studentDetails[college][1][0].secretKeys = _secretKeys;
-            studentDetails[college][1][0].certType = _certType;
+            studentDetails2[college][index][certIndex]
+                .collegeName = studentStruct.collegeName;
+            studentDetails2[college][index][certIndex].ID = studentStruct.ID;
+            studentDetails2[college][index][certIndex].name = studentStruct
+                .name;
+            studentDetails2[college][index][certIndex].year = studentStruct
+                .year;
+            studentDetails2[college][index][certIndex].course = studentStruct
+                .course;
+            studentDetails2[college][index][certIndex].rollNo = studentStruct
+                .rollNo;
+            studentDetails2[college][index][certIndex].DOJ = studentStruct.DOJ;
+            studentDetails[college][index][certIndex].certs = _certs;
+            // studentDetails[college][index][certIndex].certName = _certNames;
+            // studentDetails[college][index][certIndex].secretKeys = _secretKeys;
+            // studentDetails[college][index][certIndex].certType = _certType;
             // require(1 == 2, "commented item range");
             // }
         } else {
