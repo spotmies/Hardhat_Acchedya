@@ -18,7 +18,7 @@ error YOUR_PROFILE_VERIFICATION_PENDING();
 /// @dev Go through the resources mentioned in the Docs folder before making any changes to the contract. This is a UUPS upgradable contract, so it is better to understand how upgrades work in solidity before making changes.
 
 contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
-    function initialize() public reinitializer(8) {
+    function initialize() public initializer {
         ///@dev as there is no constructor, we need to initialise the OwnableUpgradeable explicitly
         __Ownable_init();
     }
@@ -56,10 +56,12 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
         address _collegeAddr,
         address _studentWalletAddress,
         string memory _role,
-        student_certs[] memory _certs,
-        // string[] memory _certNames,
-        // string[] memory _secretKeys,
-        // string memory _certType,
+        string[] memory _certs,
+        string[] memory _certNames,
+        string[] memory _secretKeys,
+        string memory _version,
+        uint _certIndex,
+        string memory _certType,
         student2 memory studentStruct2 // student memory studentStruct // , // student2 memory studentStruct2
     ) public {
         // (address collegeAddr, uint32 _verified, string memory _role, uint256 collegeCount) = add_cert_helper(_collegeAddr, _studentWalletAddress);
@@ -89,7 +91,18 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
                 studentIndex(_collegeAddr, colReq[_collegeAddr])
             );
             studentDetails[_collegeAddr][colReq[_collegeAddr]].push(
-                student(_certs, block.timestamp, _role, _collegeAddr, _verified)
+                student(
+                    _certs,
+                    _certNames,
+                    _secretKeys,
+                    _version,
+                    _certIndex,
+                    _certType,
+                    block.timestamp,
+                    _role,
+                    _collegeAddr,
+                    _verified
+                )
             );
             studentDetails2[_collegeAddr][colReq[_collegeAddr]].push(
                 student2(
@@ -166,7 +179,7 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
         uint256 _index,
         uint _certIndex,
         string memory _role,
-        student_certs[] memory _certs,
+        string[] memory _certs,
         // string[] memory _certNames,
         // string[] memory _secretKeys,
         // string memory _certType,
@@ -212,7 +225,7 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
             studentDetails2[college][index][certIndex].rollNo = studentStruct
                 .rollNo;
             studentDetails2[college][index][certIndex].DOJ = studentStruct.DOJ;
-            studentDetails[college][index][certIndex].certs = _certs;
+            studentDetails[college][index][certIndex].certsHash = _certs;
             // studentDetails[college][index][certIndex].certName = _certNames;
             // studentDetails[college][index][certIndex].secretKeys = _secretKeys;
             // studentDetails[college][index][certIndex].certType = _certType;
