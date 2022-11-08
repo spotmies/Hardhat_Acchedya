@@ -23,7 +23,12 @@
     },
     {
       "address": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
-      "txHash": "0x09af35617e74aad51d5139c91769005934bbc82fbfbedcefc8ef09617b035846",
+      "txHash": "0xe8c2166f579f495c338600f2280f74815cc1c94a46f12867b49c0ad678dc28d1",
+      "kind": "uups"
+    },
+    {
+      "address": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+      "txHash": "0xd98d707bf729693469f69bfd764415d7e4a66c778358261d7c9b0d39a3d6516d",
       "kind": "uups"
     }
   ],
@@ -854,9 +859,9 @@
         }
       }
     },
-    "1c43af32f50c3a22a57cdb8e66b4f6f10f842d4468b6ed1b28774a64da8c3623": {
+    "59de348f29912376e3851339df884f06913fe4c735fba44fa43f284573da5e21": {
       "address": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
-      "txHash": "0xaf39766d883be5fb70e2ec060529aceaff718094fa6646261630e123829d5f6f",
+      "txHash": "0x5dd99128116124fee92e2baa356b9388dc0554889cb0f94d2bf4056775b4ca73",
       "layout": {
         "solcVersion": "0.8.7",
         "storage": [
@@ -905,7 +910,7 @@
             "label": "studIndex",
             "offset": 0,
             "slot": "101",
-            "type": "t_mapping(t_address,t_array(t_struct(studentIndex)2891_storage)dyn_storage)",
+            "type": "t_mapping(t_address,t_array(t_struct(studentIndex)2034_storage)dyn_storage)",
             "contract": "variables",
             "src": "contracts\\variables.sol:25"
           },
@@ -1011,7 +1016,7 @@
             "label": "struct CollegeVariables.student2[]",
             "numberOfBytes": "32"
           },
-          "t_array(t_struct(studentIndex)2891_storage)dyn_storage": {
+          "t_array(t_struct(studentIndex)2034_storage)dyn_storage": {
             "label": "struct variables.studentIndex[]",
             "numberOfBytes": "32"
           },
@@ -1035,7 +1040,7 @@
             "label": "mapping(address => struct CollegeVariables.college[])",
             "numberOfBytes": "32"
           },
-          "t_mapping(t_address,t_array(t_struct(studentIndex)2891_storage)dyn_storage)": {
+          "t_mapping(t_address,t_array(t_struct(studentIndex)2034_storage)dyn_storage)": {
             "label": "mapping(address => struct variables.studentIndex[])",
             "numberOfBytes": "32"
           },
@@ -1237,7 +1242,7 @@
             ],
             "numberOfBytes": "224"
           },
-          "t_struct(studentIndex)2891_storage": {
+          "t_struct(studentIndex)2034_storage": {
             "label": "struct variables.studentIndex",
             "members": [
               {

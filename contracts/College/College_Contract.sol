@@ -18,7 +18,7 @@ error YOUR_PROFILE_VERIFICATION_PENDING();
 /// @dev Go through the resources mentioned in the Docs folder before making any changes to the contract. This is a UUPS upgradable contract, so it is better to understand how upgrades work in solidity before making changes.
 
 contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
-    function initialize() public initializer {
+    function initialize() public reinitializer(7) {
         ///@dev as there is no constructor, we need to initialise the OwnableUpgradeable explicitly
         __Ownable_init();
     }
@@ -177,7 +177,7 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
         address _collegeAddr,
         // address _studentWalletAddress,
         uint256 _index,
-        uint _certIndex,
+        // uint _certIndex,
         string memory _role,
         string[] memory _certs,
         // string[] memory _certNames,
@@ -191,15 +191,15 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
         // string memory _role = checkAddress(msg.sender);
         address college = _collegeAddr;
         uint256 index = _index;
-        uint i;
-        uint certIndex;
+        // uint i;
+        // uint256 certIndex;
 
-        for (i = 0; i <= studentDetails[college][index].length; i++) {
-            if (studentDetails[college][index][i].certIndex == _certIndex) {
-                certIndex = _certIndex;
-                return;
-            }
-        }
+        // for (i = 0; i <= studentDetails[college][index].length; i++) {
+        //     if (studentDetails[college][index][i].certIndex == _certIndex) {
+        //         certIndex = _certIndex;
+        //         return;
+        //     }
+        // }
         // return "commented item range";
         // if (index_Array.length != 0 && index_Array[0].clgAddr == college) {
         if (
@@ -213,19 +213,15 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
             keccak256(abi.encodePacked("COLLEGE_WAITING"))
             // college != address(0)
         ) {
-            studentDetails2[college][index][certIndex]
-                .collegeName = studentStruct.collegeName;
-            studentDetails2[college][index][certIndex].ID = studentStruct.ID;
-            studentDetails2[college][index][certIndex].name = studentStruct
-                .name;
-            studentDetails2[college][index][certIndex].year = studentStruct
-                .year;
-            studentDetails2[college][index][certIndex].course = studentStruct
-                .course;
-            studentDetails2[college][index][certIndex].rollNo = studentStruct
-                .rollNo;
-            studentDetails2[college][index][certIndex].DOJ = studentStruct.DOJ;
-            studentDetails[college][index][certIndex].certsHash = _certs;
+            studentDetails2[college][index][0].collegeName = studentStruct
+                .collegeName;
+            studentDetails2[college][index][0].ID = studentStruct.ID;
+            studentDetails2[college][index][0].name = studentStruct.name;
+            studentDetails2[college][index][0].year = studentStruct.year;
+            studentDetails2[college][index][0].course = studentStruct.course;
+            studentDetails2[college][index][0].rollNo = studentStruct.rollNo;
+            studentDetails2[college][index][0].DOJ = studentStruct.DOJ;
+            studentDetails[college][index][0].certsHash = _certs;
             // studentDetails[college][index][certIndex].certName = _certNames;
             // studentDetails[college][index][certIndex].secretKeys = _secretKeys;
             // studentDetails[college][index][certIndex].certType = _certType;
