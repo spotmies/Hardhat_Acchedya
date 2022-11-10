@@ -18,7 +18,7 @@ error YOUR_PROFILE_VERIFICATION_PENDING();
 /// @dev Go through the resources mentioned in the Docs folder before making any changes to the contract. This is a UUPS upgradable contract, so it is better to understand how upgrades work in solidity before making changes.
 
 contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
-    function initialize() public reinitializer(7) {
+    function initialize() public initializer {
         ///@dev as there is no constructor, we need to initialise the OwnableUpgradeable explicitly
         __Ownable_init();
     }
@@ -57,10 +57,10 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
         address _studentWalletAddress,
         string memory _role,
         string[] memory _certs,
-        string[] memory _certNames,
-        string[] memory _secretKeys,
-        string memory _version,
-        uint _certIndex,
+        // string[] memory _certNames,
+        // string[] memory _secretKeys,
+        // string memory _version,
+        string memory _certIndex,
         string memory _certType,
         student2 memory studentStruct2 // student memory studentStruct // , // student2 memory studentStruct2
     ) public {
@@ -93,9 +93,9 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
             studentDetails[_collegeAddr][colReq[_collegeAddr]].push(
                 student(
                     _certs,
-                    _certNames,
-                    _secretKeys,
-                    _version,
+                    // _certNames,
+                    // _secretKeys,
+                    // _version,
                     _certIndex,
                     _certType,
                     block.timestamp,
@@ -177,7 +177,7 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
         address _collegeAddr,
         // address _studentWalletAddress,
         uint256 _index,
-        // uint _certIndex,
+        // string _certIndex,
         string memory _role,
         string[] memory _certs,
         // string[] memory _certNames,
