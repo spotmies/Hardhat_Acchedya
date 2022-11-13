@@ -61,6 +61,7 @@ contract CompanyVariables is OwnableUpgradeable {
         string companyName;
         string employeeName;
         string reasonForInvitation;
+        string companyKey;
         uint32 status;
     }
 

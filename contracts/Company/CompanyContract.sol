@@ -164,12 +164,18 @@ contract CompanyContract is variables, CompanyVariables, UUPSUpgradeable {
                 _employeeName,
                 _companyName,
                 _reasonForInvitation,
+                "",
                 1
             )
         );
     }
 
-    function updateStatus(uint32 _index, uint32 inviStatus) public {
+    function Accept_company_req(
+        uint32 _index,
+        uint32 inviStatus,
+        string memory _companyKey
+    ) public {
+        jobInvites[msg.sender][_index].companyKey = _companyKey;
         jobInvites[msg.sender][_index].status = inviStatus;
     }
 
