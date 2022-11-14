@@ -36,8 +36,8 @@ contract CompanyVariables is OwnableUpgradeable {
         string designation;
         uint256 timestamp;
         string[] certs;
-        string[] certName;
-        string certType;
+        // string[] certName;
+        // string certType;
         // certificates[] empCerts;
         string AddedBy;
         address companyAdd;

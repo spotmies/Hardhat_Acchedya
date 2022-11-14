@@ -33,14 +33,13 @@ contract CompanyContract is variables, CompanyVariables, UUPSUpgradeable {
     function AddEmployeeCert(
         address _studentAddress,
         address _companyAddress,
+        string memory _role,
         string memory _joiningDate,
         string memory _leftDate,
         string memory _designation,
-        string[] memory _certs,
-        string[] memory _certNames,
-        string memory _certType
+        string[] memory _certs // string[] memory _certNames, // string memory _certType
     ) public {
-        string memory _role = checkAddress(msg.sender);
+        // string memory _role = checkAddress(msg.sender);
         uint32 _verify;
 
         if (
@@ -69,8 +68,8 @@ contract CompanyContract is variables, CompanyVariables, UUPSUpgradeable {
                     _designation,
                     block.timestamp,
                     _certs,
-                    _certNames,
-                    _certType,
+                    // _certNames,
+                    // _certType,
                     _role,
                     _companyAddress,
                     _verify
@@ -90,14 +89,14 @@ contract CompanyContract is variables, CompanyVariables, UUPSUpgradeable {
     function update_employee_cert(
         address _studentAddress,
         address _companyAddress,
+        string memory _role,
         string memory _joiningDate,
         string memory _leftDate,
         string memory _designation,
-        string[] memory _certs,
-        string[] memory _certNames,
-        string memory _certType
-    ) public {
-        string memory _role = checkAddress(msg.sender);
+        string[] memory _certs // string[] memory _certNames,
+    ) public // string memory _certType
+    {
+        // string memory _role = checkAddress(msg.sender);
         uint32 _verify;
 
         if (
@@ -123,8 +122,8 @@ contract CompanyContract is variables, CompanyVariables, UUPSUpgradeable {
             employeeCert[_studentAddress][0][0].designation = _designation;
             employeeCert[_studentAddress][0][0].timestamp = block.timestamp;
             employeeCert[_studentAddress][0][0].certs = _certs;
-            employeeCert[_studentAddress][0][0].certName = _certNames;
-            employeeCert[_studentAddress][0][0].certType = _certType;
+            // employeeCert[_studentAddress][0][0].certName = _certNames;
+            // employeeCert[_studentAddress][0][0].certType = _certType;
             employeeCert[_studentAddress][0][0].AddedBy = _role;
             employeeCert[_studentAddress][0][0].companyAdd = _companyAddress;
             employeeCert[_studentAddress][0][0].verified = _verify;

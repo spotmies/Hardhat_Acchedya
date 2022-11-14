@@ -45,6 +45,8 @@ contract CollegeVariables is OwnableUpgradeable {
         string course;
         string rollNo;
         string DOJ;
+        string certIndex;
+        string ss_proof;
     }
 
     struct college {

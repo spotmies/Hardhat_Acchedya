@@ -112,7 +112,9 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
                     studentStruct2.year,
                     studentStruct2.course,
                     studentStruct2.rollNo,
-                    studentStruct2.DOJ
+                    studentStruct2.DOJ,
+                    studentStruct2.certIndex,
+                    studentStruct2.ss_proof
                 )
             );
         } else {
@@ -191,6 +193,14 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
         // string memory _role = checkAddress(msg.sender);
         address college = _collegeAddr;
         uint256 index = _index;
+        uint32 _verified = 1;
+
+        if (
+            keccak256(abi.encodePacked(_role)) ==
+            keccak256(abi.encodePacked("COLLEGE"))
+        ) {
+            _verified = 2;
+        }
         // uint i;
         // uint256 certIndex;
 
@@ -213,6 +223,7 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
             keccak256(abi.encodePacked("COLLEGE_WAITING"))
             // college != address(0)
         ) {
+            studentDetails[college][index][0].verified = _verified;
             studentDetails2[college][index][0].collegeName = studentStruct
                 .collegeName;
             studentDetails2[college][index][0].ID = studentStruct.ID;
@@ -222,6 +233,8 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
             studentDetails2[college][index][0].rollNo = studentStruct.rollNo;
             studentDetails2[college][index][0].DOJ = studentStruct.DOJ;
             studentDetails[college][index][0].certsHash = _certs;
+            studentDetails2[college][index][0].ss_proof = studentStruct
+                .ss_proof;
             // studentDetails[college][index][certIndex].certName = _certNames;
             // studentDetails[college][index][certIndex].secretKeys = _secretKeys;
             // studentDetails[college][index][certIndex].certType = _certType;
