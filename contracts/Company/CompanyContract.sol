@@ -151,14 +151,15 @@ contract CompanyContract is variables, CompanyVariables, UUPSUpgradeable {
 
     function sendInvitation(
         address _employeeAddr,
+        address _companyAddress,
         string memory _employeeName,
         string memory _companyName,
         string memory _reasonForInvitation
     ) public {
-        companyReqs[msg.sender].push(_employeeAddr);
+        companyReqs[_companyAddress].push(_employeeAddr);
         jobInvites[_employeeAddr].push(
             jobRequests(
-                msg.sender,
+                _companyAddress,
                 _employeeAddr,
                 _employeeName,
                 _companyName,

@@ -3,3 +3,13 @@ https://blog.trailofbits.com/
 https://medium.com/nomic-foundation-blog/malicious-backdoors-in-ethereum-proxies-62629adf3357
 
 https://forum.openzeppelin.com/t/beware-of-the-proxy-learn-how-to-exploit-function-clashing/1070
+
+https://medium.com/buildbear/learn-how-to-audit-smart-contracts-focusing-on-reentrancy-guard-e624553a0fbb
+
+best practises:
+https://consensys.github.io/smart-contract-best-practices/general-philosophy/simplicity-vs-complexity/
+
+SLITHER:
+https://coinsbench.com/smart-contract-auditing-with-vs-code-hardhat-and-slither-f9dd18fdd729
+
+https://blog.solidityscan.com/understanding-re-entrancy-in-smart-contracts-97cb67ecbb07
