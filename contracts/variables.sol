@@ -22,6 +22,13 @@ contract variables is OwnableUpgradeable {
         uint256 index;
     }
 
+    struct reserved {
+        string reserved1;
+        string reserved2;
+        string reserved3;
+        string reserved4;
+    }
+
     mapping(address => studentIndex[]) internal studIndex;
     // mapping(address => uint256) internal userID;
 

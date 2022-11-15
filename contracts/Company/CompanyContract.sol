@@ -72,7 +72,8 @@ contract CompanyContract is variables, CompanyVariables, UUPSUpgradeable {
                     // _certType,
                     _role,
                     _companyAddress,
-                    _verify
+                    _verify,
+                    ""
                 )
             );
         } else {
@@ -93,9 +94,8 @@ contract CompanyContract is variables, CompanyVariables, UUPSUpgradeable {
         string memory _joiningDate,
         string memory _leftDate,
         string memory _designation,
-        string[] memory _certs // string[] memory _certNames,
-    ) public // string memory _certType
-    {
+        string[] memory _certs // string[] memory _certNames, // string memory _certType
+    ) public {
         // string memory _role = checkAddress(msg.sender);
         uint32 _verify;
 
@@ -164,7 +164,8 @@ contract CompanyContract is variables, CompanyVariables, UUPSUpgradeable {
                 _companyName,
                 _reasonForInvitation,
                 "",
-                1
+                1,
+                ""
             )
         );
     }

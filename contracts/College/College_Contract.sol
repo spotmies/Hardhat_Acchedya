@@ -101,7 +101,8 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
                     block.timestamp,
                     _role,
                     _collegeAddr,
-                    _verified
+                    _verified,
+                    ""
                 )
             );
             studentDetails2[_collegeAddr][colReq[_collegeAddr]].push(
@@ -114,7 +115,8 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
                     studentStruct2.rollNo,
                     studentStruct2.DOJ,
                     studentStruct2.certIndex,
-                    studentStruct2.ss_proof
+                    studentStruct2.ss_proof,
+                    studentStruct2.reserved
                 )
             );
         } else {

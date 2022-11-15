@@ -35,6 +35,7 @@ contract CollegeVariables is OwnableUpgradeable {
         string AddedBy;
         address collegeAdd;
         uint32 verified;
+        string reserved;
     }
 
     struct student2 {
@@ -47,6 +48,7 @@ contract CollegeVariables is OwnableUpgradeable {
         string DOJ;
         string certIndex;
         string ss_proof;
+        string reserved;
     }
 
     struct college {
@@ -57,6 +59,7 @@ contract CollegeVariables is OwnableUpgradeable {
         string collegeEmail;
         uint32 collegeStatus;
         address access;
+        string reserved;
     }
 
     mapping(address => uint256) internal collegeIndex;

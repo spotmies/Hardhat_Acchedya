@@ -28,6 +28,7 @@ contract CompanyVariables is OwnableUpgradeable {
         string certType;
         string certKeys;
         string Version;
+        string reserved;
     }
 
     struct employee {
@@ -42,6 +43,7 @@ contract CompanyVariables is OwnableUpgradeable {
         string AddedBy;
         address companyAdd;
         uint32 verified;
+        string reserved;
     }
 
     struct company {
@@ -53,6 +55,7 @@ contract CompanyVariables is OwnableUpgradeable {
         string companySector;
         uint256 companyStatus;
         address access;
+        string reserved;
     }
 
     struct jobRequests {
@@ -63,6 +66,7 @@ contract CompanyVariables is OwnableUpgradeable {
         string reasonForInvitation;
         string companyKey;
         uint32 status;
+        string reserved;
     }
 
     // /// // // // // // // // / /
