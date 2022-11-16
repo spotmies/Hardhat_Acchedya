@@ -171,6 +171,10 @@ contract CompanyContract is variables, CompanyVariables, UUPSUpgradeable {
         );
     }
 
+    function invitesLength() public view returns (uint256) {
+        return jobInvites[msg.sender].length;
+    }
+
     function Accept_company_req(
         uint32 _index,
         uint32 inviStatus,
