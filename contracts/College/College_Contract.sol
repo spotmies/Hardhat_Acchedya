@@ -45,7 +45,9 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
         Roles[
             0xc951d7098b66ba0b8b77265b6e9cf0e187d73125a42bcd0061b09a68be421810
         ][_studentAddress] = true;
-        studentDetails[msg.sender][colReq[_clgAddress]][0].verified = _verified;
+        studentDetails[msg.sender][colReq[_clgAddress]][0].verifiedBy = msg
+            .sender;
+        studentDetails[msg.sender][colReq[_clgAddress]][0].status = _verified;
     }
 
     /// @notice This function is used to add student certificates and students/colleges can call this function (onlyRole modifier might not appear during testing).
@@ -53,26 +55,25 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
     /// @notice The structs below student & student2 are intentionally seperated to avoid stack too deep error. Do not merge them into a single struct in future.
 
     function Add_Student_Certificates(
+        string memory _docHash,
         address _collegeAddr,
         address _studentWalletAddress,
-        string memory _role,
-        string[] memory _certs,
-        // string[] memory _certNames,
-        // string[] memory _secretKeys,
-        // string memory _version,
-        string memory _certIndex,
-        string memory _certType,
-        student2 memory studentStruct2 // student memory studentStruct // , // student2 memory studentStruct2
+        string memory _docId,
+        // uint32 _status,
+        address[] memory _sharedTo,
+        string memory _role
     ) public {
         // (address collegeAddr, uint32 _verified, string memory _role, uint256 collegeCount) = add_cert_helper(_collegeAddr, _studentWalletAddress);
         // string memory _role = waiting[msg.sender];
         uint32 _verified = 1;
+        address _verifiedBy;
         // if (collegeAddr != _collegeAddr) {
         if (
             keccak256(abi.encodePacked(_role)) ==
             keccak256(abi.encodePacked("COLLEGE_WAITING"))
         ) {
             _verified = 2;
+            _verifiedBy = msg.sender;
         }
         /*
          * Replace colReq[] mapping with studentDetails.length() before testing and check whether colReq[] mapping can be removed to save some gas.
@@ -92,31 +93,13 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
             );
             studentDetails[_collegeAddr][colReq[_collegeAddr]].push(
                 student(
-                    _certs,
-                    // _certNames,
-                    // _secretKeys,
-                    // _version,
-                    _certIndex,
-                    _certType,
-                    block.timestamp,
-                    _role,
-                    _collegeAddr,
+                    _docHash,
+                    _docId,
                     _verified,
+                    _verifiedBy,
+                    msg.sender,
+                    _sharedTo,
                     ""
-                )
-            );
-            studentDetails2[_collegeAddr][colReq[_collegeAddr]].push(
-                student2(
-                    studentStruct2.collegeName,
-                    studentStruct2.ID,
-                    studentStruct2.name,
-                    studentStruct2.year,
-                    studentStruct2.course,
-                    studentStruct2.rollNo,
-                    studentStruct2.DOJ,
-                    studentStruct2.certIndex,
-                    studentStruct2.ss_proof,
-                    studentStruct2.reserved
                 )
             );
         } else {
@@ -178,16 +161,11 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
     /// @notice The structs below student & student2 are intentionally seperated to avoid stack too deep error. Do not merge them into a single struct in future.
 
     function update_certificates(
+        string memory _docHash,
         address _collegeAddr,
-        // address _studentWalletAddress,
-        uint256 _index,
-        // string _certIndex,
+        address[] memory _sharedTo,
         string memory _role,
-        string[] memory _certs,
-        // string[] memory _certNames,
-        // string[] memory _secretKeys,
-        // string memory _certType,
-        student2 memory studentStruct
+        uint256 _index
     ) public {
         // studentIndex[] memory index_Array = get_student_Index(
         //     _studentWalletAddress
@@ -225,23 +203,10 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
             keccak256(abi.encodePacked("COLLEGE_WAITING"))
             // college != address(0)
         ) {
-            studentDetails[college][index][0].verified = _verified;
-            studentDetails2[college][index][0].collegeName = studentStruct
-                .collegeName;
-            studentDetails2[college][index][0].ID = studentStruct.ID;
-            studentDetails2[college][index][0].name = studentStruct.name;
-            studentDetails2[college][index][0].year = studentStruct.year;
-            studentDetails2[college][index][0].course = studentStruct.course;
-            studentDetails2[college][index][0].rollNo = studentStruct.rollNo;
-            studentDetails2[college][index][0].DOJ = studentStruct.DOJ;
-            studentDetails[college][index][0].certsHash = _certs;
-            studentDetails2[college][index][0].ss_proof = studentStruct
-                .ss_proof;
-            // studentDetails[college][index][certIndex].certName = _certNames;
-            // studentDetails[college][index][certIndex].secretKeys = _secretKeys;
-            // studentDetails[college][index][certIndex].certType = _certType;
-            // require(1 == 2, "commented item range");
-            // }
+            studentDetails[college][index][0].docHash = _docHash;
+            studentDetails[college][index][0].status = _verified;
+            studentDetails[college][index][0].sharedTo = _sharedTo;
+            // studentDetails[college][index][0].verifiedBy = _collegeAddr;
         } else {
             revert YOU_ARE_NOT_AUTHORIZED_TO_UPDATE();
         }
@@ -262,11 +227,11 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
     function get_Student_Details(address _collegeAddr, uint256 _colReq)
         public
         view
-        returns (student[] memory, student2[] memory)
+        returns (student[] memory)
     {
         return (
-            studentDetails[_collegeAddr][_colReq],
-            studentDetails2[_collegeAddr][_colReq]
+            studentDetails[_collegeAddr][_colReq]
+            // studentDetails2[_collegeAddr][_colReq]
         );
     }
 

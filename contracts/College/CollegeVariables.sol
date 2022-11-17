@@ -27,29 +27,27 @@ contract CollegeVariables is OwnableUpgradeable {
     // }
 
     struct student {
-        // student_certs[] certs;
-        string[] certsHash;
-        string certIndex;
-        string certType;
-        uint256 timestamp;
-        string AddedBy;
-        address collegeAdd;
-        uint32 verified;
+        string docHash;
+        string docId;
+        uint32 status;
+        address verifiedBy;
+        address createdBy;
+        address[] sharedTo;
         string reserved;
     }
 
-    struct student2 {
-        string collegeName;
-        string ID;
-        string name;
-        string year;
-        string course;
-        string rollNo;
-        string DOJ;
-        string certIndex;
-        string ss_proof;
-        string reserved;
-    }
+    // struct student2 {
+    //     string collegeName;
+    //     string ID;
+    //     string name;
+    //     string year;
+    //     string course;
+    //     string rollNo;
+    //     string DOJ;
+    //     string certIndex;
+    //     string ss_proof;
+    //     string reserved;
+    // }
 
     struct college {
         address collegeWalAddress;
@@ -64,7 +62,7 @@ contract CollegeVariables is OwnableUpgradeable {
 
     mapping(address => uint256) internal collegeIndex;
     mapping(address => mapping(uint256 => student[])) internal studentDetails;
-    mapping(address => mapping(uint256 => student2[])) internal studentDetails2;
+    // mapping(address => mapping(uint256 => student2[])) internal studentDetails2;
     mapping(address => college[]) internal collegeDetails;
     mapping(address => bool) internal CollegeAddress;
 
