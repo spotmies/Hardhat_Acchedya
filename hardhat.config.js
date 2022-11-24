@@ -32,6 +32,12 @@ module.exports = {
       chainId: 4,
       blockConfirmations: 6,
     },
+    mumbai: {
+      url: "https://matic-mumbai.chainstacklabs.com",
+      accounts: [GOERLI_PRIVATE_KEY],
+      chainId: 80001,
+      blockConfirmations: 6,
+    },
     goerli: {
       url: GOERLI_RPC_URL,
       accounts: [GOERLI_PRIVATE_KEY],

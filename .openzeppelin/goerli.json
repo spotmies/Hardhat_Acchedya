@@ -120,6 +120,11 @@
       "address": "0xCdB043b729b8b9Da1873f8e13FCd0eF879561392",
       "txHash": "0x971a94dfb9e517085ed9cc8dfbe55310748f31b3c15d0075b4ba096a336f058d",
       "kind": "uups"
+    },
+    {
+      "address": "0xE7129164476C9b01dB1D326EEA7e7B64F482aC72",
+      "txHash": "0x91556ca7c4a990a8a6ce1cd89973b83887ce2254e36e5e4f72e6798121fcda13",
+      "kind": "uups"
     }
   ],
   "impls": {
@@ -27715,6 +27720,342 @@
             "numberOfBytes": "320"
           },
           "t_struct(studentIndex)2789_storage": {
+            "label": "struct variables.studentIndex",
+            "members": [
+              {
+                "label": "clgAddr",
+                "type": "t_address",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "index",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "1"
+              }
+            ],
+            "numberOfBytes": "64"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          },
+          "t_uint32": {
+            "label": "uint32",
+            "numberOfBytes": "4"
+          },
+          "t_uint8": {
+            "label": "uint8",
+            "numberOfBytes": "1"
+          }
+        }
+      }
+    },
+    "3e90b9bd13f57e4bbd29dc6fb8565b0932227a5d8c5c8362c0c431a641115f11": {
+      "address": "0xa7A88e908474d44d1aED0474Cd97f3d572aC38AE",
+      "txHash": "0x32eefc2fd01d8d3bf8f36d80e6c14c79437f8d5b89010976259c1f69cfeca618",
+      "layout": {
+        "solcVersion": "0.8.7",
+        "storage": [
+          {
+            "label": "_initialized",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_uint8",
+            "contract": "Initializable",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:62",
+            "retypedFrom": "bool"
+          },
+          {
+            "label": "_initializing",
+            "offset": 1,
+            "slot": "0",
+            "type": "t_bool",
+            "contract": "Initializable",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:67"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_array(t_uint256)50_storage",
+            "contract": "ContextUpgradeable",
+            "src": "@openzeppelin\\contracts-upgradeable\\utils\\ContextUpgradeable.sol:36"
+          },
+          {
+            "label": "_owner",
+            "offset": 0,
+            "slot": "51",
+            "type": "t_address",
+            "contract": "OwnableUpgradeable",
+            "src": "@openzeppelin\\contracts-upgradeable\\access\\OwnableUpgradeable.sol:22"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "52",
+            "type": "t_array(t_uint256)49_storage",
+            "contract": "OwnableUpgradeable",
+            "src": "@openzeppelin\\contracts-upgradeable\\access\\OwnableUpgradeable.sol:94"
+          },
+          {
+            "label": "studIndex",
+            "offset": 0,
+            "slot": "101",
+            "type": "t_mapping(t_address,t_array(t_struct(studentIndex)2760_storage)dyn_storage)",
+            "contract": "variables",
+            "src": "contracts\\variables.sol:32"
+          },
+          {
+            "label": "waiting",
+            "offset": 0,
+            "slot": "102",
+            "type": "t_mapping(t_address,t_string_storage)",
+            "contract": "variables",
+            "src": "contracts\\variables.sol:38"
+          },
+          {
+            "label": "Roles",
+            "offset": 0,
+            "slot": "103",
+            "type": "t_mapping(t_bytes32,t_mapping(t_address,t_bool))",
+            "contract": "variables",
+            "src": "contracts\\variables.sol:40"
+          },
+          {
+            "label": "collegeIndex",
+            "offset": 0,
+            "slot": "104",
+            "type": "t_mapping(t_address,t_uint256)",
+            "contract": "CollegeVariables",
+            "src": "contracts\\College\\CollegeVariables.sol:63"
+          },
+          {
+            "label": "studentDetails",
+            "offset": 0,
+            "slot": "105",
+            "type": "t_mapping(t_address,t_mapping(t_uint256,t_array(t_struct(student)1556_storage)dyn_storage))",
+            "contract": "CollegeVariables",
+            "src": "contracts\\College\\CollegeVariables.sol:64"
+          },
+          {
+            "label": "collegeDetails",
+            "offset": 0,
+            "slot": "106",
+            "type": "t_mapping(t_address,t_array(t_struct(college)1573_storage)dyn_storage)",
+            "contract": "CollegeVariables",
+            "src": "contracts\\College\\CollegeVariables.sol:66"
+          },
+          {
+            "label": "CollegeAddress",
+            "offset": 0,
+            "slot": "107",
+            "type": "t_mapping(t_address,t_bool)",
+            "contract": "CollegeVariables",
+            "src": "contracts\\College\\CollegeVariables.sol:67"
+          },
+          {
+            "label": "colReq",
+            "offset": 0,
+            "slot": "108",
+            "type": "t_mapping(t_address,t_uint256)",
+            "contract": "CollegeVariables",
+            "src": "contracts\\College\\CollegeVariables.sol:69"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "109",
+            "type": "t_array(t_uint256)50_storage",
+            "contract": "ERC1967UpgradeUpgradeable",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\ERC1967\\ERC1967UpgradeUpgradeable.sol:211"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "159",
+            "type": "t_array(t_uint256)50_storage",
+            "contract": "UUPSUpgradeable",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\UUPSUpgradeable.sol:107"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_array(t_address)dyn_storage": {
+            "label": "address[]",
+            "numberOfBytes": "32"
+          },
+          "t_array(t_struct(college)1573_storage)dyn_storage": {
+            "label": "struct CollegeVariables.college[]",
+            "numberOfBytes": "32"
+          },
+          "t_array(t_struct(student)1556_storage)dyn_storage": {
+            "label": "struct CollegeVariables.student[]",
+            "numberOfBytes": "32"
+          },
+          "t_array(t_struct(studentIndex)2760_storage)dyn_storage": {
+            "label": "struct variables.studentIndex[]",
+            "numberOfBytes": "32"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]",
+            "numberOfBytes": "1568"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]",
+            "numberOfBytes": "1600"
+          },
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_bytes32": {
+            "label": "bytes32",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_array(t_struct(college)1573_storage)dyn_storage)": {
+            "label": "mapping(address => struct CollegeVariables.college[])",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_array(t_struct(studentIndex)2760_storage)dyn_storage)": {
+            "label": "mapping(address => struct variables.studentIndex[])",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_bool)": {
+            "label": "mapping(address => bool)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_mapping(t_uint256,t_array(t_struct(student)1556_storage)dyn_storage))": {
+            "label": "mapping(address => mapping(uint256 => struct CollegeVariables.student[]))",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_string_storage)": {
+            "label": "mapping(address => string)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_uint256)": {
+            "label": "mapping(address => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_bytes32,t_mapping(t_address,t_bool))": {
+            "label": "mapping(bytes32 => mapping(address => bool))",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_array(t_struct(student)1556_storage)dyn_storage)": {
+            "label": "mapping(uint256 => struct CollegeVariables.student[])",
+            "numberOfBytes": "32"
+          },
+          "t_string_storage": {
+            "label": "string",
+            "numberOfBytes": "32"
+          },
+          "t_struct(college)1573_storage": {
+            "label": "struct CollegeVariables.college",
+            "members": [
+              {
+                "label": "collegeWalAddress",
+                "type": "t_address",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "collegeName",
+                "type": "t_string_storage",
+                "offset": 0,
+                "slot": "1"
+              },
+              {
+                "label": "collegeAddress",
+                "type": "t_string_storage",
+                "offset": 0,
+                "slot": "2"
+              },
+              {
+                "label": "collegePhone",
+                "type": "t_string_storage",
+                "offset": 0,
+                "slot": "3"
+              },
+              {
+                "label": "collegeEmail",
+                "type": "t_string_storage",
+                "offset": 0,
+                "slot": "4"
+              },
+              {
+                "label": "collegeStatus",
+                "type": "t_uint32",
+                "offset": 0,
+                "slot": "5"
+              },
+              {
+                "label": "access",
+                "type": "t_address",
+                "offset": 4,
+                "slot": "5"
+              },
+              {
+                "label": "reserved",
+                "type": "t_string_storage",
+                "offset": 0,
+                "slot": "6"
+              }
+            ],
+            "numberOfBytes": "224"
+          },
+          "t_struct(student)1556_storage": {
+            "label": "struct CollegeVariables.student",
+            "members": [
+              {
+                "label": "docHash",
+                "type": "t_string_storage",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "docId",
+                "type": "t_string_storage",
+                "offset": 0,
+                "slot": "1"
+              },
+              {
+                "label": "status",
+                "type": "t_uint32",
+                "offset": 0,
+                "slot": "2"
+              },
+              {
+                "label": "verifiedBy",
+                "type": "t_address",
+                "offset": 4,
+                "slot": "2"
+              },
+              {
+                "label": "createdBy",
+                "type": "t_address",
+                "offset": 0,
+                "slot": "3"
+              },
+              {
+                "label": "sharedTo",
+                "type": "t_array(t_address)dyn_storage",
+                "offset": 0,
+                "slot": "4"
+              },
+              {
+                "label": "reserved",
+                "type": "t_string_storage",
+                "offset": 0,
+                "slot": "5"
+              }
+            ],
+            "numberOfBytes": "192"
+          },
+          "t_struct(studentIndex)2760_storage": {
             "label": "struct variables.studentIndex",
             "members": [
               {
