@@ -70,7 +70,9 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
         // if (collegeAddr != _collegeAddr) {
         if (
             keccak256(abi.encodePacked(_role)) ==
-            keccak256(abi.encodePacked("COLLEGE_WAITING"))
+            keccak256(abi.encodePacked("COLLEGE_WAITING")) ||
+            keccak256(abi.encodePacked(_role)) ==
+            keccak256(abi.encodePacked("COLLEGE"))
         ) {
             _verified = 2;
             _verifiedBy = msg.sender;
@@ -85,7 +87,11 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
             keccak256(abi.encodePacked(_role)) ==
             keccak256(abi.encodePacked("STUDENT_WAITING")) ||
             keccak256(abi.encodePacked(_role)) ==
-            keccak256(abi.encodePacked("COLLEGE_WAITING"))
+            keccak256(abi.encodePacked("COLLEGE_WAITING")) ||
+            keccak256(abi.encodePacked(_role)) ==
+            keccak256(abi.encodePacked("COLLEGE")) ||
+            keccak256(abi.encodePacked(_role)) ==
+            keccak256(abi.encodePacked("STUDENT"))
         ) {
             colReq[_collegeAddr] = colReq[_collegeAddr] + 1;
             studIndex[_studentWalletAddress].push(
@@ -177,7 +183,9 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
 
         if (
             keccak256(abi.encodePacked(_role)) ==
-            keccak256(abi.encodePacked("COLLEGE"))
+            keccak256(abi.encodePacked("COLLEGE")) ||
+            keccak256(abi.encodePacked(_role)) ==
+            keccak256(abi.encodePacked("COLLEGE_WAITING"))
         ) {
             _verified = 2;
         }
@@ -216,19 +224,16 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
     ////// VIEW FUNCTIONS
     //////////////////////////////////////////
 
-    function get_student_Index(address _studAddr)
-        public
-        view
-        returns (studentIndex[] memory)
-    {
+    function get_student_Index(
+        address _studAddr
+    ) public view returns (studentIndex[] memory) {
         return (studIndex[_studAddr]);
     }
 
-    function get_Student_Details(address _collegeAddr, uint256 _colReq)
-        public
-        view
-        returns (student[] memory)
-    {
+    function get_Student_Details(
+        address _collegeAddr,
+        uint256 _colReq
+    ) public view returns (student[] memory) {
         return (
             studentDetails[_collegeAddr][_colReq]
             // studentDetails2[_collegeAddr][_colReq]
