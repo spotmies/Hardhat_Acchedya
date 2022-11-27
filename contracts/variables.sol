@@ -4,7 +4,7 @@ pragma solidity ^0.8.7;
 // import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
-import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+// import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 
 /// @title Acchedya College/Student Contract
@@ -54,11 +54,9 @@ contract variables is OwnableUpgradeable {
         Roles[_role][_account] = true;
     }
 
-    function checkAddress(address _account)
-        public
-        view
-        returns (string memory)
-    {
+    function checkAddress(
+        address _account
+    ) public view returns (string memory) {
         if (
             Roles[
                 0xc951d7098b66ba0b8b77265b6e9cf0e187d73125a42bcd0061b09a68be421810

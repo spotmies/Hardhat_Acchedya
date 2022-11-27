@@ -41,7 +41,7 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
         address _clgAddress,
         address _studentAddress,
         uint32 _verified
-    ) public {
+    ) public onlyRole("COLLEGE") {
         Roles[
             0xc951d7098b66ba0b8b77265b6e9cf0e187d73125a42bcd0061b09a68be421810
         ][_studentAddress] = true;
