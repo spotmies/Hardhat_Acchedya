@@ -29,7 +29,7 @@ contract Registrations is
     CompanyVariables,
     UUPSUpgradeable
 {
-    function initialize() public initializer {
+    function initialize() public reinitializer(2) {
         ///@dev as there is no constructor, we need to initialise the OwnableUpgradeable explicitly
         __Ownable_init();
     }

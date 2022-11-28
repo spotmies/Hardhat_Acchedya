@@ -7,9 +7,7 @@ require("hardhat-gas-reporter");
 require("hardhat-deploy");
 require("dotenv").config();
 
-const GOERLI_RPC_URL = process.env.GOERLI_RPC_URL;
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
-const GOERLI_PRIVATE_KEY = process.env.GOERLI_PRIVATE_KEY;
 const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY;
 const COINMARKETCAP_API_KEY = process.env.COINMARKETCAP_API_KEY;
 const localHostKey = process.env.LOCAL_HOST_PRIVATE_KEY;
@@ -26,22 +24,16 @@ module.exports = {
       chainId: 31337,
       accounts: [localHostKey],
     },
-    rinkeby: {
-      url: "https://rinkeby.infura.io/v3/your-api-key",
+    Polygon: {
+      url: "https://polygon-rpc.com",
+      chainId: 137,
       accounts: [PRIVATE_KEY],
-      chainId: 4,
-      blockConfirmations: 6,
+      blockConfirmations: 10,
     },
     mumbai: {
       url: "https://matic-mumbai.chainstacklabs.com",
-      accounts: [GOERLI_PRIVATE_KEY],
+      accounts: [PRIVATE_KEY],
       chainId: 80001,
-      blockConfirmations: 6,
-    },
-    goerli: {
-      url: GOERLI_RPC_URL,
-      accounts: [GOERLI_PRIVATE_KEY],
-      chainId: 5,
       blockConfirmations: 6,
     },
   },

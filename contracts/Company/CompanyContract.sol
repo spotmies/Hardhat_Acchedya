@@ -18,7 +18,7 @@ error You_Cannot_Access_The_Data();
 /// @dev Go through the resources mentioned in the Docs folder before making any changes to the contract. This is a UUPS upgradable contract, so it is better to understand how upgrades work in solidity before making changes.
 
 contract CompanyContract is variables, CompanyVariables, UUPSUpgradeable {
-    function initialize() public initializer {
+    function initialize() public reinitializer(2) {
         ///@dev as there is no constructor, we need to initialise the OwnableUpgradeable explicitly
         __Ownable_init();
     }
@@ -83,7 +83,7 @@ contract CompanyContract is variables, CompanyVariables, UUPSUpgradeable {
 
     // Companies will already have access to their employees data. They list unverified employee certs and the company admin verifies them.
 
-    function verifyXpCert(address _studentAddress) public {
+    function verifyXpCert(address _studentAddress) public onlyRole("COMPANY") {
         employeeCert[_studentAddress][0][0].verified = 2;
     }
 
@@ -135,17 +135,16 @@ contract CompanyContract is variables, CompanyVariables, UUPSUpgradeable {
     /// @notice This function is used to verify employee certificates and only companies can call this function (onlyRole modifier might not be appeared during testing phase).
     /// @param _verified: 1 for pending, 2 for verified, 3 for rejected
 
-    function employeeCertVerified(address _collegeAddr, uint32 _verified)
-        public
-    {
+    function employeeCertVerified(
+        address _collegeAddr,
+        uint32 _verified
+    ) public {
         employeeCert[_collegeAddr][0][0].verified = _verified;
     }
 
-    function getEmpDet(address _studentAddr)
-        public
-        view
-        returns (employee[] memory)
-    {
+    function getEmpDet(
+        address _studentAddr
+    ) public view returns (employee[] memory) {
         return (employeeCert[_studentAddr][0]);
     }
 
@@ -155,7 +154,7 @@ contract CompanyContract is variables, CompanyVariables, UUPSUpgradeable {
         string memory _employeeName,
         string memory _companyName,
         string memory _reasonForInvitation
-    ) public {
+    ) public onlyRole("COMPANY") {
         companyReqs[_companyAddress].push(_employeeAddr);
         jobInvites[_employeeAddr].push(
             jobRequests(
@@ -179,7 +178,7 @@ contract CompanyContract is variables, CompanyVariables, UUPSUpgradeable {
         uint32 _index,
         uint32 inviStatus,
         string memory _companyKey
-    ) public {
+    ) public onlyRole("STUDENT") {
         jobInvites[msg.sender][_index].companyKey = _companyKey;
         jobInvites[msg.sender][_index].status = inviStatus;
     }
@@ -188,15 +187,18 @@ contract CompanyContract is variables, CompanyVariables, UUPSUpgradeable {
     //// VIEW FUNCTIONS
     ////////////////////////////////////////////////////////
 
-    function getEmpAddr() public view returns (address[] memory) {
+    function getEmpAddr()
+        public
+        view
+        onlyRole("COMPANY")
+        returns (address[] memory)
+    {
         return (companyReqs[msg.sender]);
     }
 
-    function getInvitations(address studAddr)
-        public
-        view
-        returns (jobRequests[] memory)
-    {
+    function getInvitations(
+        address studAddr
+    ) public view onlyRole("STUDENT") returns (jobRequests[] memory) {
         uint i;
         uint256 len = jobInvites[studAddr].length;
         jobRequests[] memory companyInvi = new jobRequests[](len);
