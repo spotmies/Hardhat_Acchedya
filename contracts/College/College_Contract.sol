@@ -17,7 +17,7 @@ error YOUR_PROFILE_VERIFICATION_PENDING();
 /// @dev Go through the resources mentioned in the Docs folder before making any changes to the contract. This is a UUPS upgradable contract, so it is better to understand how upgrades work in solidity before making changes.
 
 contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
-    function initialize() public reinitializer(2) {
+    function initialize() public reinitializer(3) {
         ///@dev as there is no constructor, we need to initialise the OwnableUpgradeable explicitly
         __Ownable_init();
     }
@@ -68,8 +68,8 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
         address _verifiedBy;
         // if (collegeAddr != _collegeAddr) {
         if (
-            keccak256(abi.encodePacked(_role)) ==
-            keccak256(abi.encodePacked("COLLEGE_WAITING")) ||
+            // keccak256(abi.encodePacked(_role)) ==
+            // keccak256(abi.encodePacked("COLLEGE_WAITING")) ||
             keccak256(abi.encodePacked(_role)) ==
             keccak256(abi.encodePacked("COLLEGE"))
         ) {
@@ -182,9 +182,9 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
 
         if (
             keccak256(abi.encodePacked(_role)) ==
-            keccak256(abi.encodePacked("COLLEGE")) ||
-            keccak256(abi.encodePacked(_role)) ==
-            keccak256(abi.encodePacked("COLLEGE_WAITING"))
+            keccak256(abi.encodePacked("COLLEGE"))
+            // keccak256(abi.encodePacked(_role)) ==
+            // keccak256(abi.encodePacked("COLLEGE_WAITING"))
         ) {
             _verified = 2;
         }
