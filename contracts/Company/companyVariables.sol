@@ -21,31 +21,6 @@ contract CompanyVariables is OwnableUpgradeable {
     // company variables
     ////////////////////////////////
 
-    struct certificates {
-        string cid;
-        string certName;
-        string certHash;
-        string certType;
-        string certKeys;
-        string Version;
-        string reserved;
-    }
-
-    struct employee {
-        string joiningDate;
-        string leftDate;
-        string designation;
-        uint256 timestamp;
-        string[] certs;
-        // string[] certName;
-        // string certType;
-        // certificates[] empCerts;
-        string AddedBy;
-        address companyAdd;
-        uint32 verified;
-        string reserved;
-    }
-
     struct company {
         address companyWalAddress;
         string companyName;
@@ -73,7 +48,6 @@ contract CompanyVariables is OwnableUpgradeable {
     mapping(address => uint256) internal companyIndex;
     mapping(address => bool) internal CompanyAddress;
 
-    mapping(address => mapping(uint256 => employee[])) internal employeeCert;
     mapping(address => company[]) internal companyDetails;
     mapping(address => jobRequests[]) internal jobInvites;
     // mapping(address => string) internal waiting;

@@ -17,7 +17,7 @@ error YOUR_PROFILE_VERIFICATION_PENDING();
 /// @dev Go through the resources mentioned in the Docs folder before making any changes to the contract. This is a UUPS upgradable contract, so it is better to understand how upgrades work in solidity before making changes.
 
 contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
-    function initialize() public reinitializer(3) {
+    function initialize() public initializer {
         ///@dev as there is no constructor, we need to initialise the OwnableUpgradeable explicitly
         __Ownable_init();
     }
@@ -30,6 +30,127 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // COLLEGE SECTION
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /// @notice  This function is used to add a college to the contract.
+    /// @param _collegeAddr wallet address of the college
+    /// @param _address physical address of the college
+
+    function Add_College(
+        address _collegeAddr,
+        string memory _collegeName,
+        string memory _address,
+        string memory _phone,
+        string memory _email,
+        uint32 _status,
+        string memory _entitySector,
+        string memory _entityType
+    ) public {
+        address collegeWalletAddress = _collegeAddr;
+        address theOwner = owner();
+        uint256 index = collegeIndex[msg.sender];
+
+        if (index == 0) {
+            waiting[msg.sender] = _entityType;
+            collegeIndex[collegeWalletAddress] = collegeDetails[theOwner]
+                .length;
+            collegeDetails[theOwner].push(
+                college(
+                    collegeWalletAddress,
+                    _collegeName,
+                    _address,
+                    _phone,
+                    _email,
+                    _status,
+                    _entitySector,
+                    msg.sender,
+                    ""
+                )
+            );
+        } else if (
+            collegeDetails[theOwner][index].collegeStatus == 2 ||
+            collegeDetails[theOwner][index].collegeStatus == 3
+        ) {
+            collegeDetails[theOwner][index].collegeName = _collegeName;
+            collegeDetails[theOwner][index].collegeAddress = _address;
+            collegeDetails[theOwner][index].collegePhone = _phone;
+            collegeDetails[theOwner][index].collegeEmail = _email;
+            collegeDetails[theOwner][index].collegeStatus = _status;
+            collegeDetails[theOwner][index].entitySector = _entitySector;
+            collegeDetails[theOwner][index].access = msg.sender;
+        } else {
+            revert YOUR_PROFILE_VERIFICATION_PENDING();
+        }
+    }
+
+    /// @notice  This function is used to verify college and only admin can call this function (onlyOwner modifier might not be appeared during testing phase).
+    /// @param _index of the college in the collegeDetails mapping
+    /// @param code 1 for pending, 2 for verified, 3 for rejected
+
+    function verifyCollege(
+        uint32 _index,
+        uint32 code,
+        address clgAddr,
+        string memory _entityType
+    ) public onlyOwner {
+        collegeDetails[msg.sender][_index].collegeStatus = code;
+
+        if (
+            keccak256(abi.encodePacked(_entityType)) ==
+            keccak256(abi.encodePacked("College"))
+        ) {
+            waiting[msg.sender] = "COLLEGE";
+            //grant college
+            GrantRole(
+                0x112ca87938ff9caa27257dbd0ca0f4fabbcf5fd4948bc02864cc3fbce825277f,
+                clgAddr
+            );
+            GrantRole(
+                0x02045258af11576776f56337f0666fcac2b654a57c15c8a528e83f2b72f40eef,
+                clgAddr
+            );
+        } else if (
+            keccak256(abi.encodePacked(_entityType)) ==
+            keccak256(abi.encodePacked("COMPANY_WAITING"))
+        ) {
+            waiting[msg.sender] = "COMPANY";
+            //grant companies
+            GrantRole(
+                0x6b930a54bc9a8d9d32021a28e2282ffedf33210754271fcab1eb90abc2021a1c,
+                clgAddr
+            );
+            GrantRole(
+                0x02045258af11576776f56337f0666fcac2b654a57c15c8a528e83f2b72f40eef,
+                clgAddr
+            );
+        }
+    }
+
+    ////////////////////////////////////////////////////////
+    //// VIEW FUNCTIONS
+    ////////////////////////////////////////////////////////
+
+    function getCollege() public view returns (college[] memory) {
+        uint i;
+        address theOwner = owner();
+        uint256 len = collegeDetails[theOwner].length;
+        college[] memory collegeDet = new college[](len);
+
+        for (i = 0; i < len; i++) {
+            if (msg.sender != owner()) {
+                if (msg.sender == collegeDetails[theOwner][i].access) {
+                    collegeDet[i] = collegeDetails[theOwner][i];
+                }
+            } else {
+                require(msg.sender == owner(), "You are not the owner.");
+                collegeDet[i] = collegeDetails[theOwner][i];
+            }
+        }
+        return (collegeDet);
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // STUDENT SECTION
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -39,13 +160,14 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
     function student_Verified(
         address _clgAddress,
         address _studentAddress,
-        uint32 _verified
+        uint32 _verified,
+        address[] memory _verifiedBy
     ) public onlyRole("COLLEGE") {
         Roles[
             0xc951d7098b66ba0b8b77265b6e9cf0e187d73125a42bcd0061b09a68be421810
         ][_studentAddress] = true;
-        studentDetails[msg.sender][colReq[_clgAddress]][0].verifiedBy = msg
-            .sender;
+        studentDetails[msg.sender][colReq[_clgAddress]][0]
+            .verifiedBy = _verifiedBy;
         studentDetails[msg.sender][colReq[_clgAddress]][0].status = _verified;
     }
 
@@ -65,7 +187,7 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
         // (address collegeAddr, uint32 _verified, string memory _role, uint256 collegeCount) = add_cert_helper(_collegeAddr, _studentWalletAddress);
         // string memory _role = waiting[msg.sender];
         uint32 _verified = 1;
-        address _verifiedBy;
+        address[] memory _verifiedBy = new address[](1);
         // if (collegeAddr != _collegeAddr) {
         if (
             // keccak256(abi.encodePacked(_role)) ==
@@ -74,7 +196,7 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
             keccak256(abi.encodePacked("COLLEGE"))
         ) {
             _verified = 2;
-            _verifiedBy = msg.sender;
+            _verifiedBy[0] = msg.sender;
         }
         /*
          * Replace colReq[] mapping with studentDetails.length() before testing and check whether colReq[] mapping can be removed to save some gas.

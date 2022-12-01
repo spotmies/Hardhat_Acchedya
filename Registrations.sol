@@ -7,6 +7,7 @@ import "./College/CollegeVariables.sol";
 import "./Company/companyVariables.sol";
 
 import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+
 // import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 
 error YOU_ARE_NOT_AUTHORIZED_TO_UPDATE();
