@@ -17,7 +17,7 @@ error YOUR_PROFILE_VERIFICATION_PENDING();
 /// @dev Go through the resources mentioned in the Docs folder before making any changes to the contract. This is a UUPS upgradable contract, so it is better to understand how upgrades work in solidity before making changes.
 
 contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
-    function initialize() public reinitializer(4) {
+    function initialize() public reinitializer(2) {
         ///@dev as there is no constructor, we need to initialise the OwnableUpgradeable explicitly
         __Ownable_init();
     }
@@ -49,7 +49,14 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
             waiting[msg.sender] = _entityType;
             collegeIndex[WalletAddress] = collegeDetails[theOwner].length;
             collegeDetails[theOwner].push(
-                college(WalletAddress, _docHash, 1, msg.sender, "")
+                college(
+                    WalletAddress,
+                    _docHash,
+                    1,
+                    msg.sender,
+                    collegeIndex[WalletAddress],
+                    ""
+                )
             );
         } else if (
             collegeDetails[theOwner][index].Status == 2 ||
@@ -143,7 +150,12 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
         address _studentAddress,
         uint32 _verified,
         address[] memory _verifiedBy
-    ) public onlyRole("COLLEGE") {
+    )
+        public
+        onlyRole(
+            0x112ca87938ff9caa27257dbd0ca0f4fabbcf5fd4948bc02864cc3fbce825277f
+        )
+    {
         Roles[
             0xc951d7098b66ba0b8b77265b6e9cf0e187d73125a42bcd0061b09a68be421810
         ][_studentAddress] = true;

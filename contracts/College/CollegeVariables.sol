@@ -41,6 +41,7 @@ contract CollegeVariables is OwnableUpgradeable {
         string docHash;
         uint32 Status;
         address access;
+        uint256 index;
         string reserved;
     }
 
