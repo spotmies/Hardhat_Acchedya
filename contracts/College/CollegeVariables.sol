@@ -36,27 +36,10 @@ contract CollegeVariables is OwnableUpgradeable {
         string reserved;
     }
 
-    // struct student2 {
-    //     string collegeName;
-    //     string ID;
-    //     string name;
-    //     string year;
-    //     string course;
-    //     string rollNo;
-    //     string DOJ;
-    //     string certIndex;
-    //     string ss_proof;
-    //     string reserved;
-    // }
-
     struct college {
-        address collegeWalAddress;
-        string collegeName;
-        string collegeAddress;
-        string collegePhone;
-        string collegeEmail;
-        uint32 collegeStatus;
-        string entitySector;
+        address WalAddress;
+        string docHash;
+        uint32 Status;
         address access;
         string reserved;
     }

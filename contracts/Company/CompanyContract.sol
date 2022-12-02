@@ -18,7 +18,7 @@ error You_Cannot_Access_The_Data();
 /// @dev Go through the resources mentioned in the Docs folder before making any changes to the contract. This is a UUPS upgradable contract, so it is better to understand how upgrades work in solidity before making changes.
 
 contract CompanyContract is variables, CompanyVariables, UUPSUpgradeable {
-    function initialize() public reinitializer(3) {
+    function initialize() public initializer {
         ///@dev as there is no constructor, we need to initialise the OwnableUpgradeable explicitly
         __Ownable_init();
     }

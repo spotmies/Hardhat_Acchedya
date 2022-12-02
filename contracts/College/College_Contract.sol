@@ -17,7 +17,7 @@ error YOUR_PROFILE_VERIFICATION_PENDING();
 /// @dev Go through the resources mentioned in the Docs folder before making any changes to the contract. This is a UUPS upgradable contract, so it is better to understand how upgrades work in solidity before making changes.
 
 contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
-    function initialize() public initializer {
+    function initialize() public reinitializer(4) {
         ///@dev as there is no constructor, we need to initialise the OwnableUpgradeable explicitly
         __Ownable_init();
     }
@@ -34,54 +34,58 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /// @notice  This function is used to add a college to the contract.
-    /// @param _collegeAddr wallet address of the college
-    /// @param _address physical address of the college
+    /// @param _walletAddr wallet address of the college/company
 
-    function Add_College(
-        address _collegeAddr,
-        string memory _collegeName,
-        string memory _address,
-        string memory _phone,
-        string memory _email,
-        uint32 _status,
-        string memory _entitySector,
+    function Add_Entity(
+        address _walletAddr,
+        string memory _docHash,
         string memory _entityType
     ) public {
-        address collegeWalletAddress = _collegeAddr;
+        address WalletAddress = _walletAddr;
         address theOwner = owner();
         uint256 index = collegeIndex[msg.sender];
 
-        if (index == 0) {
+        if (collegeDetails[theOwner].length == 0 || index == 0) {
             waiting[msg.sender] = _entityType;
-            collegeIndex[collegeWalletAddress] = collegeDetails[theOwner]
-                .length;
+            collegeIndex[WalletAddress] = collegeDetails[theOwner].length;
             collegeDetails[theOwner].push(
-                college(
-                    collegeWalletAddress,
-                    _collegeName,
-                    _address,
-                    _phone,
-                    _email,
-                    _status,
-                    _entitySector,
-                    msg.sender,
-                    ""
-                )
+                college(WalletAddress, _docHash, 1, msg.sender, "")
             );
         } else if (
-            collegeDetails[theOwner][index].collegeStatus == 2 ||
-            collegeDetails[theOwner][index].collegeStatus == 3
+            collegeDetails[theOwner][index].Status == 2 ||
+            collegeDetails[theOwner][index].Status == 3
         ) {
-            collegeDetails[theOwner][index].collegeName = _collegeName;
-            collegeDetails[theOwner][index].collegeAddress = _address;
-            collegeDetails[theOwner][index].collegePhone = _phone;
-            collegeDetails[theOwner][index].collegeEmail = _email;
-            collegeDetails[theOwner][index].collegeStatus = _status;
-            collegeDetails[theOwner][index].entitySector = _entitySector;
-            collegeDetails[theOwner][index].access = msg.sender;
+            collegeDetails[theOwner][index].docHash = _docHash;
+            collegeDetails[theOwner][index].Status = 1;
         } else {
             revert YOUR_PROFILE_VERIFICATION_PENDING();
         }
+    }
+
+    ////////////////////////////////////////////////////////
+    //// VIEW FUNCTIONS college[] memory
+    ////////////////////////////////////////////////////////
+
+    function getCollege() public view returns (college[] memory) {
+        uint i;
+        address theOwner = owner();
+        uint256 len = collegeDetails[theOwner].length;
+        college[] memory collegeDet = new college[](len);
+
+        // collegeDet[0] = collegeDetails[theOwner][0];
+        // collegeDet[1] = collegeDetails[theOwner][1];
+
+        for (i = 0; i < len; i++) {
+            if (msg.sender != owner()) {
+                if (msg.sender == collegeDetails[theOwner][i].access) {
+                    collegeDet[i] = collegeDetails[theOwner][i];
+                }
+            } else {
+                require(msg.sender == owner(), "You are not the owner.");
+                collegeDet[i] = collegeDetails[theOwner][i];
+            }
+        }
+        return (collegeDet);
     }
 
     /// @notice  This function is used to verify college and only admin can call this function (onlyOwner modifier might not be appeared during testing phase).
@@ -94,11 +98,11 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
         address clgAddr,
         string memory _entityType
     ) public onlyOwner {
-        collegeDetails[msg.sender][_index].collegeStatus = code;
+        collegeDetails[msg.sender][_index].Status = code;
 
         if (
             keccak256(abi.encodePacked(_entityType)) ==
-            keccak256(abi.encodePacked("College"))
+            keccak256(abi.encodePacked("COLLEGE_WAITING"))
         ) {
             waiting[msg.sender] = "COLLEGE";
             //grant college
@@ -125,29 +129,6 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
                 clgAddr
             );
         }
-    }
-
-    ////////////////////////////////////////////////////////
-    //// VIEW FUNCTIONS
-    ////////////////////////////////////////////////////////
-
-    function getCollege() public view returns (college[] memory) {
-        uint i;
-        address theOwner = owner();
-        uint256 len = collegeDetails[theOwner].length;
-        college[] memory collegeDet = new college[](len);
-
-        for (i = 0; i < len; i++) {
-            if (msg.sender != owner()) {
-                if (msg.sender == collegeDetails[theOwner][i].access) {
-                    collegeDet[i] = collegeDetails[theOwner][i];
-                }
-            } else {
-                require(msg.sender == owner(), "You are not the owner.");
-                collegeDet[i] = collegeDetails[theOwner][i];
-            }
-        }
-        return (collegeDet);
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
