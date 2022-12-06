@@ -17,7 +17,7 @@ error YOUR_PROFILE_VERIFICATION_PENDING();
 /// @dev Go through the resources mentioned in the Docs folder before making any changes to the contract. This is a UUPS upgradable contract, so it is better to understand how upgrades work in solidity before making changes.
 
 contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
-    function initialize() public reinitializer(2) {
+    function initialize() public initializer {
         ///@dev as there is no constructor, we need to initialise the OwnableUpgradeable explicitly
         __Ownable_init();
     }
@@ -74,7 +74,7 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
     ////////////////////////////////////////////////////////
 
     function getCollege() public view returns (college[] memory) {
-        uint i;
+        uint256 i;
         address theOwner = owner();
         uint256 len = collegeDetails[theOwner].length;
         college[] memory collegeDet = new college[](len);
@@ -322,7 +322,9 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
             keccak256(abi.encodePacked(_role)) ==
             keccak256(abi.encodePacked("STUDENT_WAITING")) ||
             keccak256(abi.encodePacked(_role)) ==
-            keccak256(abi.encodePacked("COLLEGE_WAITING"))
+            keccak256(abi.encodePacked("COLLEGE_WAITING")) ||
+            keccak256(abi.encodePacked(_role)) ==
+            keccak256(abi.encodePacked("COMPANY"))
             // college != address(0)
         ) {
             studentDetails[college][index][0].docHash = _docHash;
@@ -338,16 +340,19 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
     ////// VIEW FUNCTIONS
     //////////////////////////////////////////
 
-    function get_student_Index(
-        address _studAddr
-    ) public view returns (studentIndex[] memory) {
+    function get_student_Index(address _studAddr)
+        public
+        view
+        returns (studentIndex[] memory)
+    {
         return (studIndex[_studAddr]);
     }
 
-    function get_Student_Details(
-        address _collegeAddr,
-        uint256 _colReq
-    ) public view returns (student[] memory) {
+    function get_Student_Details(address _collegeAddr, uint256 _colReq)
+        public
+        view
+        returns (student[] memory)
+    {
         return (
             studentDetails[_collegeAddr][_colReq]
             // studentDetails2[_collegeAddr][_colReq]
