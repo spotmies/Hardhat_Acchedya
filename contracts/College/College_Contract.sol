@@ -106,7 +106,7 @@ contract College_Contract is
     ////////////////////////////////////////////////////////
 
     function getCollege() public view returns (college[] memory) {
-        uint i;
+        uint256 i;
         address theOwner = owner();
         uint256 len = collegeDetails[theOwner].length;
         college[] memory collegeDet = new college[](len);
@@ -354,7 +354,9 @@ contract College_Contract is
             keccak256(abi.encodePacked(_role)) ==
             keccak256(abi.encodePacked("STUDENT_WAITING")) ||
             keccak256(abi.encodePacked(_role)) ==
-            keccak256(abi.encodePacked("COLLEGE_WAITING"))
+            keccak256(abi.encodePacked("COLLEGE_WAITING")) ||
+            keccak256(abi.encodePacked(_role)) ==
+            keccak256(abi.encodePacked("COMPANY"))
             // college != address(0)
         ) {
             studentDetails[college][index][0].docHash = _docHash;

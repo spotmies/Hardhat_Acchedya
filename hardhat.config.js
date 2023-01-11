@@ -19,11 +19,11 @@ module.exports = {
     hardhat: {
       allowUnlimitedContractSize: true,
     },
-    localhost: {
-      url: "http://localhost:8545",
-      chainId: 31337,
-      accounts: [localHostKey],
-    },
+    // localhost: {
+    //   url: "http://localhost:8545",
+    //   chainId: 31337,
+    //   accounts: [localHostKey],
+    // },
     Polygon: {
       url: "https://polygon-rpc.com",
       chainId: 137,
