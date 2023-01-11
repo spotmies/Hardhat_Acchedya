@@ -4,6 +4,8 @@ pragma solidity ^0.8.7;
 // import "@openzeppelin/contracts/access/Ownable.sol";
 import "../variables.sol";
 import "./CollegeVariables.sol";
+import "./quoteVariable.sol";
+import "@opengsn/contracts/src/ERC2771Recipient.sol";
 
 // import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 
@@ -16,8 +18,14 @@ error YOUR_PROFILE_VERIFICATION_PENDING();
 /// @notice This contract is used to store/update/retrieve the student details and college details
 /// @dev Go through the resources mentioned in the Docs folder before making any changes to the contract. This is a UUPS upgradable contract, so it is better to understand how upgrades work in solidity before making changes.
 
-contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
-    function initialize() public reinitializer(2) {
+contract College_Contract is
+    variables,
+    CollegeVariables,
+    UUPSUpgradeable,
+    ERC2771Recipient,
+    quoteVariables
+{
+    function initialize() public reinitializer(6) {
         ///@dev as there is no constructor, we need to initialise the OwnableUpgradeable explicitly
         __Ownable_init();
     }
@@ -25,8 +33,31 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
     ///@dev required by the OZ UUPS module
     function _authorizeUpgrade(address) internal override onlyOwner {}
 
-    function version() public pure returns (string memory) {
-        return "College Version 4";
+    function _msgSender()
+        internal
+        view
+        override(ContextUpgradeable, ERC2771Recipient)
+        returns (address sender)
+    {
+        return ERC2771Recipient._msgSender();
+    }
+
+    function _msgData()
+        internal
+        view
+        override(ContextUpgradeable, ERC2771Recipient)
+        returns (bytes calldata)
+    {
+        return ERC2771Recipient._msgData();
+    }
+
+    function hemanth(string memory newQuote) public {
+        quote = newQuote;
+        who = _msgSender();
+    }
+
+    function getQuote() public view returns (string memory, address) {
+        return (quote, who);
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -43,17 +74,18 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
     ) public {
         address WalletAddress = _walletAddr;
         address theOwner = owner();
-        uint256 index = collegeIndex[msg.sender];
+        uint256 index = collegeIndex[_msgSender()];
 
         if (collegeDetails[theOwner].length == 0 || index == 0) {
-            waiting[msg.sender] = _entityType;
+            waiting[_msgSender()] = _entityType;
+
             collegeIndex[WalletAddress] = collegeDetails[theOwner].length;
             collegeDetails[theOwner].push(
                 college(
                     WalletAddress,
                     _docHash,
                     1,
-                    msg.sender,
+                    _msgSender(),
                     collegeIndex[WalletAddress],
                     ""
                 )
@@ -83,12 +115,12 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
         // collegeDet[1] = collegeDetails[theOwner][1];
 
         for (i = 0; i < len; i++) {
-            if (msg.sender != owner()) {
-                if (msg.sender == collegeDetails[theOwner][i].access) {
+            if (_msgSender() != owner()) {
+                if (_msgSender() == collegeDetails[theOwner][i].access) {
                     collegeDet[i] = collegeDetails[theOwner][i];
                 }
             } else {
-                require(msg.sender == owner(), "You are not the owner.");
+                require(_msgSender() == owner(), "You are not the owner.");
                 collegeDet[i] = collegeDetails[theOwner][i];
             }
         }
@@ -100,18 +132,18 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
     /// @param code 1 for pending, 2 for verified, 3 for rejected
 
     function verifyCollege(
-        uint32 _index,
+        uint256 _index,
         uint32 code,
         address clgAddr,
         string memory _entityType
     ) public onlyOwner {
-        collegeDetails[msg.sender][_index].Status = code;
+        collegeDetails[_msgSender()][_index].Status = code;
 
         if (
             keccak256(abi.encodePacked(_entityType)) ==
             keccak256(abi.encodePacked("COLLEGE_WAITING"))
         ) {
-            waiting[msg.sender] = "COLLEGE";
+            waiting[_msgSender()] = "COLLEGE";
             //grant college
             GrantRole(
                 0x112ca87938ff9caa27257dbd0ca0f4fabbcf5fd4948bc02864cc3fbce825277f,
@@ -125,7 +157,7 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
             keccak256(abi.encodePacked(_entityType)) ==
             keccak256(abi.encodePacked("COMPANY_WAITING"))
         ) {
-            waiting[msg.sender] = "COMPANY";
+            waiting[_msgSender()] = "COMPANY";
             //grant companies
             GrantRole(
                 0x6b930a54bc9a8d9d32021a28e2282ffedf33210754271fcab1eb90abc2021a1c,
@@ -159,9 +191,9 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
         Roles[
             0xc951d7098b66ba0b8b77265b6e9cf0e187d73125a42bcd0061b09a68be421810
         ][_studentAddress] = true;
-        studentDetails[msg.sender][colReq[_clgAddress]][0]
+        studentDetails[_msgSender()][colReq[_clgAddress]][0]
             .verifiedBy = _verifiedBy;
-        studentDetails[msg.sender][colReq[_clgAddress]][0].status = _verified;
+        studentDetails[_msgSender()][colReq[_clgAddress]][0].status = _verified;
     }
 
     /// @notice This function is used to add student certificates and students/colleges can call this function (onlyRole modifier might not appear during testing).
@@ -178,7 +210,7 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
         string memory _role
     ) public {
         // (address collegeAddr, uint32 _verified, string memory _role, uint256 collegeCount) = add_cert_helper(_collegeAddr, _studentWalletAddress);
-        // string memory _role = waiting[msg.sender];
+        // string memory _role = waiting[_msgSender()];
         uint32 _verified = 1;
         address[] memory _verifiedBy = new address[](1);
         // if (collegeAddr != _collegeAddr) {
@@ -189,7 +221,7 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
             keccak256(abi.encodePacked("COLLEGE"))
         ) {
             _verified = 2;
-            _verifiedBy[0] = msg.sender;
+            _verifiedBy[0] = _msgSender();
         }
         /*
          * Replace colReq[] mapping with studentDetails.length() before testing and check whether colReq[] mapping can be removed to save some gas.
@@ -217,7 +249,7 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
                     _docId,
                     _verified,
                     _verifiedBy,
-                    msg.sender,
+                    _msgSender(),
                     _sharedTo,
                     ""
                 )
@@ -290,7 +322,7 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
         // studentIndex[] memory index_Array = get_student_Index(
         //     _studentWalletAddress
         // );
-        // string memory _role = checkAddress(msg.sender);
+        // string memory _role = checkAddress(_msgSender());
         address college = _collegeAddr;
         uint256 index = _index;
         uint32 _verified = 1;
@@ -355,6 +387,6 @@ contract College_Contract is variables, CollegeVariables, UUPSUpgradeable {
     }
 
     function total_students_for_college() public view returns (uint256) {
-        return (colReq[msg.sender]);
+        return (colReq[_msgSender()]);
     }
 }

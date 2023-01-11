@@ -22,5 +22,9 @@
     "nft.storage": "^7.0.0",
     "solidity-coverage": "^0.8.0",
     "typechain": "^8.1.0"
+  },
+  "dependencies": {
+    "@opengsn/contracts": "^3.0.0-beta.1",
+    "@opengsn/provider": "^3.0.0-beta.1"
   }
 }
