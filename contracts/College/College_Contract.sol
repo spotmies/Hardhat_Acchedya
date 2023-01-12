@@ -5,7 +5,7 @@ pragma solidity ^0.8.7;
 import "../variables.sol";
 import "./CollegeVariables.sol";
 import "./quoteVariable.sol";
-import "@opengsn/contracts/src/ERC2771Recipient.sol";
+import "./ERC2771Recipient.sol";
 
 // import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 
@@ -25,13 +25,17 @@ contract College_Contract is
     ERC2771Recipient,
     quoteVariables
 {
-    function initialize() public reinitializer(6) {
+    function initialize() public reinitializer(8) {
         ///@dev as there is no constructor, we need to initialise the OwnableUpgradeable explicitly
         __Ownable_init();
     }
 
     ///@dev required by the OZ UUPS module
     function _authorizeUpgrade(address) internal override onlyOwner {}
+
+    function setForwarder(address forwarder) public onlyOwner {
+        _setTrustedForwarder(forwarder);
+    }
 
     function _msgSender()
         internal
