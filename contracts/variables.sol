@@ -46,7 +46,7 @@ contract variables is OwnableUpgradeable {
         keccak256(abi.encodePacked("RETRIEVER"));
 
     modifier onlyRole(bytes32 _role) {
-        require(Roles[_role][msg.sender], " Not Authorized");
+        require(Roles[_role][_msgSender()], " Not Authorized");
         _;
     }
 
@@ -81,6 +81,6 @@ contract variables is OwnableUpgradeable {
     }
 
     function walletReg() public view returns (string memory) {
-        return (waiting[msg.sender]);
+        return (waiting[_msgSender()]);
     }
 }

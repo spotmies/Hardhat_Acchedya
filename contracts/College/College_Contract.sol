@@ -25,7 +25,7 @@ contract College_Contract is
     ERC2771Recipient,
     quoteVariables
 {
-    function initialize() public reinitializer(8) {
+    function initialize() public reinitializer(11) {
         ///@dev as there is no constructor, we need to initialise the OwnableUpgradeable explicitly
         __Ownable_init();
     }
@@ -147,7 +147,7 @@ contract College_Contract is
             keccak256(abi.encodePacked(_entityType)) ==
             keccak256(abi.encodePacked("COLLEGE_WAITING"))
         ) {
-            waiting[_msgSender()] = "COLLEGE";
+            waiting[clgAddr] = "COLLEGE";
             //grant college
             GrantRole(
                 0x112ca87938ff9caa27257dbd0ca0f4fabbcf5fd4948bc02864cc3fbce825277f,
