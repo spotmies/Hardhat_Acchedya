@@ -25,7 +25,7 @@ contract College_Contract is
     ERC2771Recipient,
     quoteVariables
 {
-    function initialize() public reinitializer(2) {
+    function initialize() public reinitializer(3) {
         ///@dev as there is no constructor, we need to initialise the OwnableUpgradeable explicitly
         __Ownable_init();
     }
@@ -241,7 +241,11 @@ contract College_Contract is
             keccak256(abi.encodePacked(_role)) ==
             keccak256(abi.encodePacked("COLLEGE")) ||
             keccak256(abi.encodePacked(_role)) ==
-            keccak256(abi.encodePacked("STUDENT"))
+            keccak256(abi.encodePacked("STUDENT")) ||
+            keccak256(abi.encodePacked(_role)) ==
+            keccak256(abi.encodePacked("COMPANY_WAITING")) ||
+            keccak256(abi.encodePacked(_role)) ==
+            keccak256(abi.encodePacked("COMPANY"))
         ) {
             colReq[_collegeAddr] = colReq[_collegeAddr] + 1;
             studIndex[_studentWalletAddress].push(
