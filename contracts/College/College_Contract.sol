@@ -25,7 +25,7 @@ contract College_Contract is
     ERC2771Recipient,
     quoteVariables
 {
-    function initialize() public reinitializer(3) {
+    function initialize() public reinitializer(12) {
         ///@dev as there is no constructor, we need to initialise the OwnableUpgradeable explicitly
         __Ownable_init();
     }
